@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  * {
+    margin:0;
+    padding:0;
+  }
+  .marquee-wrap  {
+    width: 80%;
+    height: 40px;
+    border-radius: 20px;
+    background: #eee;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+.marquee-list li{
+  width: 100%;
+  height: 100%;
+  list-style: none;
+  line-height: 40px;
+  text-align: center;
+  color: #000;
+  font-size: 18px;
+  font-weight: 400;
+  }
+  .animate-up {
+    transition: all 0.5s ease-in-out;
+    transform: translateY(-40px);
+  }
+  </style>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<body>
+    <div class="marquee-wrap" id="box">
+        <ul class="marquee-list" :class="{'animate-up': animateUp}">
+          <li v-for="(item, index) in listData" :key="index">{{item}}</li>
+        </ul>
+      </div>
+  <script>
+    let vm = new Vue({
+      el: '#box',
+      data: {
+        animateUp: false,
+        listData: [
+          '12***ve 成功邀请12人 已获奖金60元', 
+          'l***e 成功邀请5人 已获奖金40元', 
+          'l***e 成功邀请1人 已获奖金5元'
+        ],
+        timer: null
+      },
+      mounted() {
+      this.timer = setInterval(this.scrollAnimate, 1500);
+    },
+    methods: {
+      scrollAnimate() {
+        this.animateUp = true
+        setTimeout(() => {
+          this.listData.push(this.listData[0])
+          this.listData.shift()
+          this.animateUp = false
+        }, 500)
+      }
+    },
+    })
+  </script>
+</body>
+</html>

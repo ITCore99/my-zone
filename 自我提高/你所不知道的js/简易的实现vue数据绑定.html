@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简易的实现数据的响应式</title>
+</head>
+<body>
+    <div id="app">
+        
+    </div>
+    <script>
+        (function() {
+            function Vue(options) {
+                this.$el = options.el.nodeType ==   1 ? options.el : document.querySelector(options.el);
+                this.$data = options.data;
+                this.proxyData(this.$data);
+                this.render();
+            }
+            //对数据添加getter和setter方法实现数据代理(使用Object.defineProperty)
+            Vue.prototype.proxyData = function(data) {
+                let that = this;
+                for(let key in data) {
+                    if(typeof data[key] == "object"){
+                        this.proxyData(data[key])
+                    }else {
+                        Object.defineProperty(that,key, {
+                            configurable:false,
+                            enumerable:true,
+                            get() {
+                                //进行依赖收集
+                                return that.$data[key];
+                            },
+                            set(newValue) {
+                                console.log(newValue);
+                                that.$data[key] = newValue;
+                                that.render()
+                            }
+                        })
+                    }
+                }
+            }
+            //使用proxy进行数据数据绑定和劫持
+            Vue.prototype.proxyData = function(data) {
+                let that = this;
+                this.$data = new Proxy( data, {
+                    get(target,key,receiver) {
+                        console.log("监听到了get");
+                        //对依赖进行收集
+                        return Reflect.get(target,key,receiver);
+                    },
+                    set(target,key,value,receiver) {
+                        console.log("监听到了set");
+                        Reflect.set(target,key,value);
+                        that.render();
+                    }
+                });
+            }
+            //实现渲染函数
+            Vue.prototype.render = function() {
+                this.$el.innerHTML = this.$data.a;
+            }
+            /**vue对数组的监听是通过重写数组方法为方法调用添加拦截器来进行的
+             * var arrayProto  = Array.prototype
+             * var arrayMethods = Object.create(arrayProto);
+             * var methodsArr = ["push","pop","splice","shift","unshift","sort","reserve"];
+             * methodsArr.forEach(method => {
+             *  let original = arrayProto[method];
+             *  arrayMethods[method] = Function() {
+             *      original.apply(this,argument)
+             *      this.$notify();
+             * }
+             * })
+            */
+            //测试
+            let vm = new Vue({
+                data: {
+                    a: [1,2,3],
+                },
+                el: "#app"
+            });
+            setTimeout(() => {
+                vm.$data.a.push(4);
+            },3000);
+                
+             /***这是对深层的json数据进行proxy监听**/
+            //进行深度代理
+            function deepProxy(obj,handler) {
+                if(isPureObject(obj)) {
+                    return new Proxy(obj, handler);
+                }else {
+                    return  addProxy(obj,handler);
+                }
+            }
+            //进行递归代理
+            function addProxy(obj,handler) {
+                //循环只是对复合属性的里面的对象进行代理
+                for(let key in obj) {
+                    if(typeof obj[key] === 'object'){
+                        if(!isPureObject(obj[key])) {
+                            obj[key] = addProxy(obj[key],handler);
+                        }else {
+                            obj[key] = new Proxy(obj[key],handler) 
+                        }
+                    }
+                }
+                //对外层属性进行代理
+                return new Proxy(obj,handler)
+            }
+            //判断是不是一个纯对象
+            function isPureObject(obj) {
+                if(typeof obj !== 'object'){
+                    return false;
+                };
+                let result = true;
+                for(let key in obj) {
+                    if(typeof obj[key] === 'object' ) {
+                        result = false;
+                        break;
+                    }
+                }
+                return result;
+            };
+            var handler = {
+                get(target,key,receiver) {
+                    console.log(`${key}->${key}进行获取`);
+                    return target[key];
+                },
+                set(target,key,value,receiver) {
+                    console.log(`${key}->${key}进行设置，新值为${value}`);
+                    target[key] = value;
+                    return true;
+                }
+            }
+            let person = {
+                name: "付卓宁",
+                age: 23,
+                desc: "递归还需努力呀",
+                friends: [1,2,3,{ss: {first: 'ss'}}]
+            }
+            let newPerson = deepProxy(person,handler);
+            // newPerson.name = "付卓宁plus"
+            newPerson.friends.push("6");
+            // newPerson.friends[3].ss.first = "yy";
+            console.log(newPerson);
+            console.log(person)
+        })()
+    </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ES5和ES6类</title>
+</head>
+<body>
+    <script>
+       /**
+        * 这是一Es5的实现思想
+        */
+        //Animal构造函数
+        function Animal() {
+            // if(new.target === Animal) {        //抽象类 不能实例化 只能被继承去实现
+            //     throw new Error("Animal can not instance");
+            // }
+            this.type = "哺乳类";       //实例属性
+            Animal.prototype.eat = function() {     //公用方法
+                console.log('吃')
+            }
+        }
+        let animal = new Animal();
+        // console.log(animal.constructor);
+        // console.log(Animal.prototype)
+        // animal.eat();
+        // console.log(animal.dd);
+        // console.log(animal.hasOwnProperty('type'));
+        // console.log(animal.hasOwnProperty('dd'));
+        // console.log(animal.hasOwnProperty('eat'));      //不是实例自身的属性而是公共的方法属性
+        //继承
+        // function Tiger() {
+        //     Animal.call(this);      //继承Animal的属性
+        // }
+        // 继承父类的方法 有很多比如 使用for in循环进行遍历继承 这里我们就不进行for in的继承而是我们使用其他的方式来实现继承。
+        //Tiger.prototype = Animal.prototype;     //这样子Tiger和Animal指向了同一块内存空间但Tiger加方法时Animal会受到影响
+        //现在我们对其进行改进 我们最好能实现的思路应该是这样 我们tiger实例首先应该去找自己构造函数原型的方法找不到再去找Animal类原型的方法所以我们找的路径是这样的 tiger的__prototype ==> Tiger的prototype 的__prototype__==>Animal的prototype;
+        //*****Tiger.prototype.__proto__= Animal.prototype;    
+        //es6中美化了上面的写法改为了下面 但是地测就是上面的这种实现方式
+        //*****Object.setPrototypeOf(Tiger.prototype,Animal.prototype);
+        //另一种实现的方式是使用Object.create();
+        //Tiger.prototype = Object.create(Animal.prototype,{constructor:{value:Tiger}});
+        //这里我们实现一个create()方法
+        // function create(parentPrototype,{constructor}) {
+        //     function Fn() {};
+        //     Fn.prototype = parentPrototype;
+        //     Fn.prototype.constructor = constructor.value;
+        //     return new Fn(); 
+        // }
+        // Tiger.prototype = create(Animal.prototype,{constructor:{value:Tiger}});
+        // let  tiger = new Tiger();
+        // console.log(tiger)
+        // console.log(tiger.type);
+        // console.log(tiger.eat());
+        // console.log(tiger.constructor);
+        /***
+         *ES6 中的继承相对来说比较简单所以这里就不再说了，自己时使用中再去学习
+         *  */
+        // class Animal {  
+        //     constructor() {
+        //         this.type = "哺乳类"        //实例上的属性
+        //     }
+        //     static speak() {    //这是静态方法 通过类调用  注意ES6不支持静态的属性 static后面只能跟方法 所以要实现静态属性我们应该如下做
+        //         console.log("说话")
+        //     }
+        //     static get a() {    //get 是当外面访问这个属性时调用get方法
+        //         return "100";
+        //     }
+        //     get b() {       //注意属性b不是实例的属性也不是类属性而是原型上的属性
+        //         return  "200"
+        //     }
+            
+        // }
+        // Animal(); //注意这里的Animal不能直接调用 只能通过new来实例 他的实现原理是如下
+        // function  Test() {
+        //     if((this instanceof Test)) {
+        //         throw new Error("Test不能够直接通过函数调用，只能通过new来实例化")
+        //     }
+        // }
+        // new Test();
+        // let lion = new Animal();
+        // console.log(lion.b);
+        // console.log(Animal.b);
+        // console.log(Animal.a);
+    </script>
+</body>
+</html>

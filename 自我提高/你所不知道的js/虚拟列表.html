@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      height: 400px;
+      overflow: auto;
+      position: relative;
+      border: 1px solid #aaa;
+    }
+    .container .phantom {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: -1;
+    }
+    .container .phantom .list {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+    .container .phantom .list .item {
+      height: 40px;
+      border-bottom: 1px solid #aaa;
+      background: cornsilk;
+      padding-left:20px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<body>
+    <div class="container" id="container" @scroll="handleScroll">
+      <div class="phantom" :style="{height: contentHeight}">
+        <div class="list" ref="content">
+          <div class="item"  v-for="(item,index) in visibleData" :key="index">
+            {{item.content}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // 每一个节点的高度
+      let itemHeight = 40; 
+      let vm = new Vue({
+        el: '#container',
+        data: {
+          // 总数据
+          listData: [],
+          // 可用数据
+          visibleData: [],
+          // 存放节流函数
+          handleScroll: null
+        },
+        created() {
+          this.init();
+        },
+        computed: {
+          contentHeight() {
+            return this.listData.length * itemHeight + 'px';
+          }
+        },
+        mounted() {
+          this.updateVisibleData();
+        },
+        methods: {
+          // 初始化函数
+          init() {
+            this.createListData();
+            this.handleScroll = this.throttle(this.updateVisibleData, 1/50);
+            // this.findNearestItemIndex()
+          },
+          // 创造数据
+          createListData() {
+            let listData  = [];
+            for(let i = 0; i < 100; i++) {
+              listData.push({
+                content: i
+              });
+            }
+            this.listData = listData;
+          },
+
+          // 更新
+          updateVisibleData() {
+            let scrollTop =  this.$el.scrollTop || 0;
+            let visibleCount = Math.ceil(this.$el.clientHeight / itemHeight);
+            let start = Math.floor(scrollTop / itemHeight);
+            let end = start + visibleCount;
+            this.visibleData = this.listData.slice(start, end);
+            // 让十个元素一直在可见区域内
+            // this.$refs.content.style.webkitTransform = `translate3d(0, ${start * itemHeight}px, 0)`
+            this.$refs.content.style.paddingTop = ` ${start * itemHeight}px`
+          },
+
+          // 节流函数
+          throttle(fn, wait) {
+            var timer = null;
+            var lastTime = 0;
+            return function(...args) {
+              let nowTime = new Date().getTime();
+              if (nowTime - lastTime > wait) {
+                fn.apply(this,args);
+                lastTime = nowTime;
+              } else {
+                if (timer) {
+                  window.clearTimeout(timer)
+                }
+                timer = window.setTimeout(() => {
+                  fn.apply(this,args);
+                }, wait)
+              }
+            }
+          },
+
+          // 找到最近的元素索引
+          findNearestItemIndex(scrollTop) {
+            const { data } = this;
+            console.log(data, this);
+          }
+        }
+      })
+    </script>
+</body>
+</html>

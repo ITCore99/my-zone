@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数据结构与算法之链表的封装</title>
+</head>
+<body>
+    <div>
+
+    </div>
+    <script>    
+        function LinkedList() {     //链表构造器
+            function Node(data) {       //链表数据构造器
+                this.data = data;  
+                this.next = null;      //链表节点指向下一个节点的指针
+            };
+            this.head = null;           //head指针指向链表中的第一个元素
+            this.length = 0;        //保存链表中数据的长度
+            //向链表的末尾添加数据
+            LinkedList.prototype.append = function(data) {
+                //第一个首先创建一个节点
+                let newNode = new Node(data);
+                if(this.length == 0) {      //当链表中没有数据 
+                   this.head = newNode;
+                }else {     //当链表中有数据
+                    let current = this.head;
+                    while(current.next) {  //注意这里current而不是current.next
+                        current = current.next;
+                    }
+                    //这时已经找到最后一个元素
+                    current.next = newNode;
+                }
+                this.length += 1;
+            },
+            //insert向链表中的指定位置插入元素
+            LinkedList.prototype.insert = function (position,data) {
+                if(position < 0 || position > this.length) {
+                    throw new Error("数组越界异常")
+                };
+             
+                let newNode = new Node(data);
+                if(position == 0) {         //插入到第一位
+                    newNode.next = this.head;
+                    this.head = newNode;
+                } else {
+                    let index = 0;
+                    let prev = null;
+                    let current = this.head;
+                    while(index++ < position) {
+                        prev = current;
+                        current = current.next;
+                    }
+                    prev.next = newNode;
+                    newNode.next = current;
+                }
+                this.length += 1;
+            }
+            //toString方法是将链表中的元素全部转化为字符串进行输出
+            LinkedList.prototype.toString = function () {
+                let linkedListStr  = "";
+                let current = this.head;
+                while(current) {
+                    linkedListStr += current.data + ";";
+                    current = current.next;
+                };
+                return linkedListStr
+            }
+            //get()方法是得到指定位置上的元素
+            LinkedList.prototype.get = function(position) {
+                if(position < 0 || position > this.length-1) {
+                    throw new Error("数据越界异常");
+                };
+                let index = 0;
+                let current = this.head;
+                while(index ++ < position) {
+                    current = current.next;
+                }
+                return current.data;
+            }
+            //indexOf方法传入元素找到元素在链表中的下标值
+            LinkedList.prototype.indexOf = function(data) {
+                let current = this.head;
+                let index = 0;
+                while(current) {
+                    if(current.data == data) {
+                        return index;
+                    } 
+                    current = current.next;
+                    index += 1;
+                }
+                return -1;
+            }
+            //update方法是修改某个位置上的元素
+            LinkedList.prototype.update = function(position,newData) {
+                if(position < 0 || position > this.length -1) {
+                    throw new Error("数组越界异常");
+                }
+                let index = 0;
+                let current = this.head;
+                while(index++ < position) {
+                    current = current.next;
+                }
+                current.data = newData
+            }
+            //removeAt方法是从列表的特定位置移除一项
+            LinkedList.prototype.removeAt = function(position) {
+                if(position < 0 ||  position > this.length -1) {
+                    throw new Error("数组越界异常");
+                    
+                }
+                if(position == 0) {         //要移除的是链表的第一项
+                    this.head = this.head.next;
+                } else {
+                    let index = 0;
+                    let prev = null;
+                    let current = this.head;
+                    while(index++ < position) {
+                        prev = current;
+                        current = current.next;
+                    }
+                    prev.next = current.next;
+                    this.length -= 1;
+                    return true;
+                } 
+            }
+            //remove()方法删除指定的元素
+            LinkedList.prototype.remove = function (data) {
+                let index = this.indexOf(data);
+                return this.removeAt(index);
+            }
+            //isEmpty()方法是判断链表是否为空
+            LinkedList.prototype.isEmpty = function () {
+                return this.length == 0;
+            }
+        }
+        //测试链表的append方法
+        let linkedList = new LinkedList();
+        linkedList.append("小明");
+        linkedList.append("小红");
+        linkedList.append("小李");
+        // alert(linkedList);
+        //测试链表的get方法
+        // alert(linkedList.get(0));
+        // alert(linkedList.get(2));
+        //测试链表的indexOf方法
+        // alert(linkedList.indexOf("小明"));
+        // alert(linkedList.indexOf("小红"));
+        // alert(linkedList.indexOf("小李"));
+        //测试update更新方法
+        // linkedList.update(0,"小付");
+        // linkedList.update(1,"小蓝");
+        // linkedList.update(2,"小程");
+        //测试链表的removeAt方法
+        // linkedList.removeAt(0);
+        // linkedList.removeAt(1)
+        //linkedList.removeAt(2);
+        //测试链表的remove方法
+        // linkedList.remove("小明");
+        // linkedList.remove("小红");
+        // linkedList.remove("小李");
+        //测试链表的isEmpty方法测试
+        //alert (linkedList.isEmpty());
+        //测试链表的insert方法
+        linkedList.insert(0,"小付");
+        // linkedList.insert(1,"小xian");
+        // linkedList.insert(5,"小莫");
+        alert(linkedList)
+
+
+    </script>
+</body>
+</html>

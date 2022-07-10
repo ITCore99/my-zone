@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./sku.css">
+</head>
+<body>
+  <div id="app">
+    <ul class="sku-container">
+      <li class="sku-row" v-for="(item,index) in list" :key="index">
+        <div class="sku-title">{{item.category}}</div>
+        <div 
+          v-for="(temp,key) in item.values" 
+          class="sku-item" 
+          @click="handleChangeCheck(item, key, temp)"
+          :class="temp.checked ? 'active' : temp.disable ?  'disable' : ''" 
+          :key="key">
+          {{temp.name}}
+        </div>
+      </li>
+      <li class="selected-info">
+        <span class="selected-title">选择规格：</span>
+        <span class="selected-item" v-for="(temp,index) in currentSelectedList" :key="index">
+          {{temp.value.name}}
+        </span>
+      </li>
+    </ul>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="./sku.js"></script>
+</body>
+</html>

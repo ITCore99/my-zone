@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>快速排序算法</title>
+</head>
+<body>
+    <script>
+        //实现快速排序阮一峰版本 
+        //所谓的快速排序就是首先选择一个基准元素，所有大于这个基准元素的数全部放到基准元素的右边，小于基准元素的数全部放到基准元素的左边，之后对集中元素的左右两个子集不断的重复以上步骤只到所有的自己都剩下一个元素为止。            
+            
+        function quickStart(arry) {
+            if(arry.length <= 1) {
+                return arry;
+            };
+            //  取基准点
+            var pivotIndex = Math.floor(arry.length / 2);
+            var pivot = arry.splice(pivotIndex,1)[0];
+            //左右子集
+            var left = [];
+            var right = [];
+            for(let i = 0,len = arry.length; i < len ; i++) {
+                if(arry[i] < pivot) {
+                    left.push(arry[i])
+                }else {
+                    right.push(arry[i]);
+                }
+            }
+            return quickStart(left).concat([pivot],quickStart(right));
+        }
+        console.log(quickStart(arr))
+    </script>
+</body>
+</html>\

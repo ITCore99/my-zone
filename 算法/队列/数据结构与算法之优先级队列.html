@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数据结构与算法之优先级队列</title>
+</head>
+<body>
+    //优先的队列和队列的唯以的其区别是队列插入是会将插入的元素添加到队列的尾部而优先级队列的
+    //并不一定将插入的元素插入到队列的尾部而是将更具插入元素的优先值将插入的元素放置到队列的
+    //合适位置所以鉴于优先级队列和队列的好多方法都相同所以我们只实现优先队列的插入方法其他的
+    //方法就不一一的实现了留下来让同学们自己去理解体会
+    <script>
+        function PriorityQueue() {
+            //由于优先级队列中元素既要包含数据还要包含数据的优先级所以我们完全可以把每一个元素看做是一个对象进行对待
+            this.items = [];
+            function PriorityElement(element,priority) {    //这相当java中的内部类
+                this.element = element;
+                this.priority = priority;
+            }
+            //添加队列
+            PriorityQueue.prototype.enPriorityQueue = function(element,priority) {
+                let item = new PriorityElement(element,priority);
+                //当队列中本来就没有元素是我们不需要排序直接插入元素即可
+                let len = this.items.length;
+                let added = false;
+                if(len == '0') {
+                    this.items.push(item);
+                    return
+                }
+                //如果队列中从在元素怎进行遍历比较;假设我们我们以越小元素优先级越高
+                for(let i = 0; i < len; i++) {
+                    if(item.priority < this.items[i].priority){
+                        this.items.splice(i,0,item);
+                        added = true;
+                        break;
+                    }
+                }
+                if(!added) {
+                    this.items.push(item);
+                }
+            }
+        }
+        //测试优先级队列
+        let myPriorityQueue = new PriorityQueue();
+        myPriorityQueue.enPriorityQueue("小明",1);
+        myPriorityQueue.enPriorityQueue("小红",2);
+        myPriorityQueue.enPriorityQueue("小娴",0);
+        myPriorityQueue.enPriorityQueue("小线",10);
+        myPriorityQueue.enPriorityQueue("小=",20);
+        myPriorityQueue.enPriorityQueue("小+",5);
+        
+        console.log(myPriorityQueue);
+    </script>
+</body>
+</html>

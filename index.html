@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <ul id="DocumentFragment">
+            <li>test1</li>
+            <li>test2</li>
+            <li>test3</li>
+        </ul>
+    </div>
+    <script>
+        let obj1 = {
+            get a() {
+                return 1;
+            },
+            set a(value) {
+                console.log("setValue",value);
+            }
+        }
+        obj1.a = '11';
+        console.log(obj1.a);
+        //定义对象
+        var  obj = {
+            firstName: 'A',
+            lastName: 'B'
+        }
+        //给obj添加fullName属性
+        Object.defineProperty(obj,'fullName',{
+                configurable: true,
+                enumerable: true,
+                get() {
+                    return this.firstName + "-" + this.lastName;
+                },
+                set(value) {
+                    nameArray = value.split('-');
+                    this.firstName = nameArray[0];
+                    this.lastName = nameArray[1];
+                }
+            }
+        );
+        console.log(obj.fullName);
+        obj.firstName = 'C';
+        obj.lastName = 'D';
+        console.log(obj.fullName);
+        obj.fullName = 'E-F';
+        console.log(obj.firstName);
+        console.log(obj.lastName);
+        let ul = document.querySelector('#DocumentFragment');
+        //创建documentFragment;就是一个容器存放dom在内存中
+        let fragment = document.createDocumentFragment();
+        //去除ul中的所有几点包括元素节点
+        while(ul.firstChild){
+            let child = ul.firstChild;
+            fragment.appendChild(child) //将节点移除页面Dom放到内存DocumentFragment;
+        }
+        //更新frame中的所有li文本
+        Array.prototype.slice.call(fragment.childNodes).forEach(element => {
+            if(element.nodeType == 1) {
+                element.textContent = '付卓宁'
+            }
+        });
+        ul.appendChild(fragment);
+    </script>
+</body>
+</html>

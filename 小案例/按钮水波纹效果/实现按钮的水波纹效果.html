@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <a>button</a>
+  <a>button</a>
+  <script>
+    let instance = null;
+    let aDoms = document.querySelectorAll('a')
+    aDoms.forEach(item => {
+      item.addEventListener('click', function(e) {
+        let x = e.clientX - item.offsetLeft
+        let y = e.clientY - item.offsetTop
+        if (!instance) {
+          // 创建波纹dom
+          let ripple = document.createElement('span')
+          ripple.className = 'rippleStyle'
+          ripple.style.left = x + 'px'
+          ripple.style.top = y + 'px'
+          this.appendChild(ripple)
+          setTimeout(() => {
+            this.removeChild(ripple)
+          }, 1000)
+        }
+      })
+    })
+  </script>
+</body>
+</html>

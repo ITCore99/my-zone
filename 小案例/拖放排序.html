@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <style>
+                img {
+                        float: left;
+                        width: 100px;
+                        margin-left: 5px
+                }
+
+                .del {
+                        position: relative;
+                        border: 1px solid red
+                }
+                .box {
+                        position: absolute;
+                        height: 100px;
+                        width: 100%;
+                        text-align: center;
+                        line-height: 100px;
+                        font-size: 20px;
+                        border: 1px solid #f00;
+                        cursor: pointer;
+                }
+                .box:nth-child(2n) {
+                        background-color: #ddd;
+                }
+        </style>
+</head>
+
+<body>
+        <div class="del" id="del">
+                
+        </div>
+</body>
+<script>
+
+        var del = document.getElementById("del")
+        let box = null, boxY = 0, targetBox = null
+        var boxList = [
+                {x: 0, y: 0, content: 1},
+                {x: 0, y: 0, content: 2},
+                {x: 0, y: 0, content: 3},
+                {x: 0, y: 0, content: 4},
+                {x: 0, y: 0, content: 5},
+                {x: 0, y: 0, content: 6}
+        ]
+        function setBox () {
+                var html = ''
+                boxList.forEach((item, index) => {
+                        html+= `<div class="box" style="top:${100*index}px">${item.content}</div>`
+                })
+                del.innerHTML= html
+                init()
+        }
+        setBox()
+
+        function init () {
+                var boxs = Array.prototype.slice.call(document.getElementsByClassName("box"), 0)
+                boxs.forEach(function(item, index) {
+                        boxList[index].y = item.offsetTop
+                        item.addEventListener('mousedown', function(e) {
+                                box = item 
+                                boxY = e.offsetY
+                                item.style.zIndex = 1
+                                targetBox = boxList.splice(index, 1)
+                                del.addEventListener('mousemove', move)
+                        })
+                        item.addEventListener('mouseup', function(e) {
+                                let targetY = e.clientY - del.offsetTop - this.clientHeight/2
+                                let findIndex = -1
+                                boxList.forEach(function(b, v) {
+                                        if (targetY <= b.y && findIndex == -1) {
+                                                findIndex = v
+                                        }
+                                })
+                                boxList.splice(findIndex,0,targetBox[0])
+                                setBox()
+                                del.removeEventListener('mousemove', move)
+                        })
+                })
+                
+        }
+
+        function move() {
+                let y = event.clientY - del.offsetTop - boxY
+                console.log(y)
+                box.style.top = y + 'px'
+        }
+
+        
+
+        console.log(boxList)
+
+</script>
+
+</html>

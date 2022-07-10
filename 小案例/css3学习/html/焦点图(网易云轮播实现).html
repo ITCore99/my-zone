@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    * {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    .container {
+      perspective: 500px;
+      width: 500px;
+      height: 280px;
+      margin: 50px auto;
+      border: 1px solid red;
+
+    }
+
+    ul {
+      position: relative;
+
+    }
+
+    li {
+      transition: transform linear .5s;
+      list-style-type: none;
+      position: absolute;
+      display: none;
+      top: 0;
+      left: 0;
+      width: 500px;
+      height: 280px;
+      z-index: 2;
+      border: 1px solid green;
+    }
+
+    .center {
+      display: block;
+      z-index: 998;
+      transform: translateZ(-50px);
+    }
+
+    .left1 {
+      display: block;
+      z-index: 990;
+      transform: translateX(-100px) rotateY(30deg) translateZ(-150px);
+    }
+
+    .left2 {
+      display: block;
+      z-index: 980;
+      transform: translateX(-300px) rotateY(20deg) translateZ(-150px);
+    }
+
+    .right1 {
+      display: block;
+      z-index: 990;
+      transform: translateX(100px) rotateY(-30deg) translateZ(-150px);
+    }
+
+    .right2 {
+      display: block;
+      z-index: 980;
+      transform: translateX(300px) rotateY(-20deg) translateZ(-150px);
+    }
+  </style>
+</head>
+
+<body>
+  <button id="prev">
+    上一张
+  </button>
+  <button id="next">
+    下一张
+  </button>
+  <div class="container">
+    <ul class="slider">
+      <li class="left2"><img src="../images/焦点变换/1.jpg"></li>
+      <li class="left1"><img src="../images/焦点变换/2.jpg"></li>
+      <li class="center"><img src="../images/焦点变换/3.jpg"></li>
+      <li class="right1"><img src="../images/焦点变换/4.jpg"></li>
+      <li class="right2"><img src="../images/焦点变换/5.jpg"></li>
+      <li><img src="../images/焦点变换/6.jpg"></li>
+      <li><img src="../images/焦点变换/7.jpg"></li>
+      <li><img src="../images/焦点变换/8.jpg"></li>
+      <li><img src="../images/焦点变换/9.jpg"></li>
+    </ul>
+  </div>
+</body>
+<script>
+  function $(selector) {
+    return document.querySelector(selector);
+  }
+  let prev = $("#prev");
+  let next = $("#next");
+  let lis = document.querySelectorAll("li");
+  let lock = false;/**类似的还是为了防止用户单机过快*/
+  let flag = true;
+  let classLists = ["left2", "left1", "center", "right1", "right2", "", "", "", ""];/**注意通过数组来进行不断地变化类来实现*/
+  prev.onclick = function () {
+    if (!lock) {
+      console.log("进来了吗")
+      lock = true;
+      setTimeout(function () {
+        lock = false;
+      }, 500);
+      var top = classLists.shift();
+      classLists.push(top);
+      console.log(classLists)
+      lis.forEach((item, index) => {
+        item.className = classLists[index]
+      })
+    }
+  }
+  next.onclick = function () {
+    if (!lock) {
+      lock = true;
+      setTimeout(function () {
+        lock = false;
+      }, 500);
+
+      carousel();
+    }
+  };
+  function carousel() {
+    var bottom = classLists.pop();
+    classLists.unshift(bottom);
+    lis.forEach((item, index) => {
+      item.className = classLists[index]
+    })
+  }
+  prev.onmouseover = function () {
+    flag = false;
+  }
+  prev.onmouseleave = function () {
+    flag = true;
+  }
+  next.onmouseover = function () {
+    flag = false;
+  }
+  next.onmouseleave = function () {
+    flag = true;
+  }
+  setInterval(() => {
+    if (flag) {
+      carousel();
+    }
+  }, 2000);
+</script>
+
+</html>

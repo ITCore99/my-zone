@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    //reduce和reduceRight对于空数组不会执行回调
+    [].reduce((prev, current, index, arry) => {
+      console.log("执行了");
+    }, 0);
+    //累加
+    function totalizer(...args) {
+      return args.reduce((prev, current) => prev + current, 0);
+    }
+    //累乘
+    function multiplication(...args) {
+      return args.reduce((prev, current) => prev * current, 1);
+    };
+    //权重求和
+    const scores = [
+      { score: 90, subject: "chinese", weight: 0.5 },
+      { score: 95, subject: "math", weight: 0.3 },
+      { score: 85, subject: "english", weight: 0.2 },
+    ];
+    const result = scores.reduce((prev, current) => prev + current.score * current.weight, 0);
+    //代替reverse方法 本身的数组reverse会修改原数组
+    function reserve(arr = []) {
+      return arr.reduceRight((prev, current) => (prev.push(current), prev), []); //这里语法写法有点秀还没理解
+    };
+    //代替map和filter
+    const arr = [0, 1, 2, 3];
+    const a = arr.map(item => item * 2);
+    const b = arr.reduce((prev, current) => [...prev, current * 2], []);
+    const c = arr.reduce((prev, current) => (prev.push(current * 2), prev), []);
+    //数组分割 原理就是无论怎么分割肯定最后都是二维数组 每次判断上次执行完的数组也就是最后一个数组是否满足维数不满足就push满足开始下一个
+    //注意这里的prev[prev.length - 1]永远取的是上一次分割完后数组的最后一个元素。我们也只用判断最后一个元素，如果不是最后一个元素肯定满足维数了。
+    function chunk(arr = [], size = 1) {
+      return arr.length ? arr.reduce((prev, current) => {
+        prev[prev.length - 1].length == size ? prev.push([current]) : prev[prev.length - 1].push(current);
+        return prev;
+      }, [[]]) : [];
+    }
+    //数组过滤
+    function difference(arr = [], oarr = []) {
+      return arr.reduce((prev, current) => {
+        prev.includes(current) ? prev : prev.push(current);
+        return prev;
+      }, []);
+    }
+    //数组扁平化
+    function flat(arr = []) {
+      return arr.length != 0 ? arr.reduce((prev, current) => {
+        return prev.concat(Array.isArray(current) ? flat(current) : current)
+      }, []) : [];
+    }
+    // 使用非递归的方式实现数组的展开
+    function noDiFlat(arr) {
+      let stack = arr.slice()
+      const r = []
+      while (stack.length) {
+        const item = stack.pop()
+        if (Array.isArray(item)) {
+          stack = stack.concat(item)
+        } else {
+          r.push(item)
+        }
+      }
+      return r
+    }
+    //数组去重
+    function unique(arr = []) {
+      return arr.reduce((prev, current) => (prev.includes(current) ? prev : [...prev, current]), []);
+    }
+    //数组的最大值最小值
+    function max(arr = []) {
+      return arr.reduce((prev, current) => prev > current ? prev : current);
+    }
+    function min(arr = []) {
+      return arr.reduce((prev, current) => prev < current ? prev : current);
+    }
+    //统计数组成员 此方法是字符统计和单词统计的原理，入参时把字符串处理成数组即可
+    function count(arr = []) {
+      return arr.reduce((prev, current) => (prev[current] = (prev[current] || 0) + 1, prev), {});
+    }
+    //数组成员位置记录
+    function position(arr = [], val) {
+      return arr.reduce((prev, current, index) => (current === val ? prev.push(index) : prev, prev), [])
+    }
+    //字符串翻转
+    function reserveStr(str = "") {
+      return str.split("").reduceRight((prev, current) => prev + current);
+    }
+    //数组成员特性分组 注意这里都使用逗号运算符 返回最后一个
+    function group(arr = [], key) {
+      return key ? arr.reduce((prev, current) => {
+        return (!prev[current[key]] && (prev[current[key]] = []), prev[current[key]].push(current), prev)
+      }, {}) : {}
+    }
+    //更容易理解的写法
+    function group2(arr = [], key) {
+      return key ? arr.reduce((prev, current) => {
+        if (!prev[current[key]]) {
+          prev[current[key]] = [];
+        }
+        prev[current[key]].push(current);
+        return prev;
+      }, {}) : {}
+    }
+    const array = [
+      { area: "GZ", name: "YZW", age: 27 },
+      { area: "GZ", name: "TYJ", age: 25 },
+      { area: "SZ", name: "AAA", age: 23 },
+      { area: "FS", name: "BBB", age: 21 },
+      { area: "SZ", name: "CCC", age: 19 }
+    ];
+    console.log(group2(array, "area"));
+    //斐波拉契数列
+    function fibonacci(len = 2) {
+      const arr = [...new Array(len).keys()];
+      arr.reduce((prev, current, index) => (index > 1 && prev.push(prev[index - 2] + prev[index - 1]), prev), [0, 1])
+    }
+    console.log(fibonacci(10));
+  </script>
+</body>
+
+</html>

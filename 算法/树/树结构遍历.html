@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>二分查找</title>
+</head>
+
+<body>
+  <script>
+    //生成二叉树代码code
+    function treeCode() {
+      //创建一个节点的构造函数
+      let BiTree = function BiTree(element) {
+        this.data = element;
+        this.leftChild = null;
+        this.rightChild = null;
+      }
+      function createTree() {
+        let biTree = new BiTree('A');
+        biTree.leftChild = new BiTree('B');
+        biTree.rightChild = new BiTree('C');
+        biTree.leftChild.leftChild = new BiTree('D');
+        biTree.leftChild.leftChild.leftChild = new BiTree('G');
+        biTree.leftChild.leftChild.rightChild = new BiTree('H');
+        biTree.rightChild.leftChild = new BiTree('E');
+        biTree.rightChild.leftChild.leftChild = new BiTree('I');
+        biTree.rightChild.rightChild = new BiTree('F');
+        biTree.rightChild.rightChild.rightChild = new BiTree('j');
+        biTree.rightChild.rightChild.rightChild.rightChild = new BiTree('K');
+        return biTree;
+      }
+      return createTree();
+    }
+    let BiTreeCode = treeCode();
+    console.log("我的二叉树", BiTreeCode);
+    let preOrderStr = "";
+    let midOrderStr = "";
+    let backOrderStr = "";
+    //前序遍历
+    function preOrder(biTree) {
+      if (biTree == null) return;
+      preOrderStr += biTree.data;
+      //console.log(biTree.data)
+      preOrder(biTree.leftChild); //这里进行递归就先走左子树
+      preOrder(biTree.rightChild);
+    }
+    preOrder(BiTreeCode);
+    console.log("前序遍历", preOrderStr);
+    //中序遍历
+    function midOrder(biTree) {
+      if (biTree == null) return;
+      midOrder(biTree.leftChild);
+      midOrderStr += biTree.data;
+      midOrder(biTree.rightChild)
+
+    }
+    //midOrder(BiTreeCode);
+    //console.log("中序遍历",midOrderStr);
+    //后序遍历
+    function backOrder(biTree) {
+      if (biTree == null) return;
+      backOrder(biTree.leftChild);
+      backOrder(biTree.rightChild);
+      backOrderStr += biTree.data;
+    }
+    //backOrder(BiTreeCode);
+    //console.log("后序遍历",backOrderStr);
+    //深度优先非递归 是利用栈的先进后出的思想进行实现 
+    function depthFirstSearch(biTree) {
+      let stack = [];
+      stack.push(biTree);
+      while (stack.length != 0) {
+        let node = stack.pop();
+        console.log("深度优先", node.data);
+        if (node.rightChild) {
+          stack.push(node.rightChild);
+        }
+        if (node.leftChild) {
+          stack.push(node.leftChild);
+        }
+      }
+      // let depthStr = "";
+      // console.log("stack",stack);
+      // stack.forEach(item => {
+      //     depthStr += item.data;
+      // })
+      // console.log("深度优先",depthStr);
+    }
+    depthFirstSearch(BiTreeCode);
+    //广度优先遍历二叉树
+    function rangeFirstSearch(biTree) {
+      let queueList = [];
+      queueList.push(biTree);
+      while (queueList.length != 0) {
+        let node = queueList.shift();
+        console.log("广度优先", node.data);
+        if (node.leftChild) {
+          queueList.push(node.leftChild);
+        }
+          if (node.rightChild) {
+            queueList.push(node.rightChild);
+          };
+      }
+
+    }
+    rangeFirstSearch(BiTreeCode)
+  </script>
+</body>
+
+</html>

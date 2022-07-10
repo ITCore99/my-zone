@@ -1,0 +1,36 @@
+<view class="container">
+  <!--左侧的导航栏-->
+  <view class="left-nav">
+    <scroll-view 
+      scroll-y="true" 
+      class="nav"
+      style='height:{{windowHeight}}rpx'
+      scroll-with-animation="true" >
+        <view 
+          class="{{item.id == activeNavId ? 'leftNav-item active' : 'leftNav-item'}}"
+          wx:for="{{navData}}" 
+          wx:for-item="item" 
+          bindtap='navTap'
+          data-id="{{item.id}}"
+          wx:key="{{item.id}}" >
+          {{item.name}}
+        </view>
+    </scroll-view>
+  </view>
+  <!--右侧的内容区域-->
+  <view class="content-part">
+    <scroll-view scroll-y="true" style='height:{{windowHeight}}rpx' scroll-into-view="{{activeNavId}}"          scroll-with-animation="true" bindscroll="contentScroll" class="nav">
+      <view 
+        class="module"
+         wx:for="{{contentData}}" 
+         wx:for-item="item" 
+         id="{{item.type}}" 
+         wx:key="{{item.type}}">
+          <view class="goods-item" wx:for="{{item.values}}" wx:for-item="temp" wx:key="{{temp.id}}">
+          <image class="img" src="{{temp.image}}" ></image>
+          <view class="name">{{temp.name}}</view>
+          </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

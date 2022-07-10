@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>防抖与节流</title>
+</head>
+<body>
+    <button id="btn">点我进行抢购(测试节流)</button>
+    <input placeholder="测试防抖" id="input"/>
+    <script>
+        /**
+        *节流：就是对于某些按钮来时无论用户点击的多块事件只会按照指定的时间间隔去执行;
+        *防抖：所谓的防抖就是当我们进行频繁的操作要触发一些事件我们不会一直触发而是等到操作完后若干秒触发 列入
+        *百度搜索
+        */
+
+        //定义节流函数
+        function throttle(fn,wait) {
+            var lastTime = 0;   //闭包常驻内存
+            var timer = null;   //闭包常驻内存
+            return function(event) {
+                let args = arguments;
+                let noWTime = new Date().getTime();
+                if(noWTime - lastTime > wait) {        //当事件大于指定的时间时就去执行
+                    console.log(noWTime,lastTime,noWTime - lastTime)
+                    fn.apply(this,arguments);
+                    lastTime = noWTime;
+                } else {            //如果不大于指定的时间 为了保证点击最后也触发一次
+                    clearTimeout(timer);        //  清除定时器
+                    timer = setTimeout(() => {
+                        fn.call(this,arguments);
+                    },wait)
+                }
+            }
+            
+        }
+        //测试节流
+        let btn = document.querySelector("#btn");
+        function buy(event) {
+            console.log("进行抢购了",event);
+        }
+        btn.onclick = throttle(buy,2000);
+
+
+        //定义防抖函数
+        function debounce(fn,wait) {
+          var timer;        //闭包常驻内存保存我们的定时器
+          return function() {
+            let args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                fn.apply(this,arguments);
+            },wait)
+          }
+        }
+        //测试防抖
+        let input = document.querySelector("#input");
+        function write(event) {
+            console.log("输入流",event,this);
+        }
+        input.oninput = debounce(write,1000)
+    </script>
+</body>
+</html>

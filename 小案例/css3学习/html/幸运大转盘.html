@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding:0;
+        }
+        .container
+        {
+            position:relative;
+            width:650px;
+            height:600px;
+            margin: 20px auto;
+            background: url("../images/turntable-bg.jpg");
+        }
+        img{
+            display: block;
+        }
+        .circle
+        {
+            width: 450px;
+            height:450px;
+            position:absolute;
+            top:57px;
+            left:115px;
+            transition: transform ease 3s;
+        }
+        .pointer
+        {
+            position:absolute;
+            width:174px;
+            height:228px;
+            top:161px;
+            left:252px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="circle">
+            <img src="../images/turntable.png" style="width:450px;height:450px"/>
+        </div>
+        <div class="pointer">
+            <img src="../images/pointer.png" style="width: 174px;height: 228px"/>
+        </div>
+    </div>
+</body>
+<script>
+    function $(selector)
+    {
+        return document.querySelector(selector);
+    }
+    let circle=$(".circle");
+    let pointer=$(".pointer");
+    let lock=false;
+    let turnAng=0;
+    let angle=[0, 51, 102, 153, 205, 256, 307]
+    pointer.addEventListener("click",function(){
+           if(!lock)
+           {
+               lock=true;
+               setTimeout(()=>{
+                   lock=false;/**注意这个lock的目的是为了保证点击完抽奖转完之后再来才能点击触发方法**/
+               },3000);
+               let num=Math.round(Math.random()*6);
+               turnAng +=720+angle[num];/**注意这里一定要加一定要别之前大的不然会出现倒转**/
+           // console.log(num,turnAng);
+               circle.style.transform=`rotateZ(${turnAng}deg)`
+           }
+    });
+</script>
+</html>

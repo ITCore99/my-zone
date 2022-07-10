@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>背景图的渐变</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box
+        {
+            width:200px;
+            height:200px;
+            border: 1px solid #000;
+            margin:50px;
+            /*background:linear-gradient(90deg,red,yellow); *//**没有webkit是w3c*/
+            background: -webkit-linear-gradient(left,deeppink,deepskyblue);/**webkit是whatwg*/
+        }
+        .box2
+        {
+            width:200px;
+            height:200px;
+            border: 1px solid #000;
+            margin:50px;
+            background: radial-gradient(100px 100px,red,yellow);
+        }
+    </style>
+</head>
+<body>
+   <div class="box">
+   </div>
+   <div class="box2">
+
+   </div>
+</body>
+</html>

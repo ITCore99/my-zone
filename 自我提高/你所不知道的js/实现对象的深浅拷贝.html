@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>实现对象的深浅拷贝</title>
+</head>
+
+<body>
+  <script>
+    function clone(obj) {
+      if (obj === null || !obj) {
+        return null;
+      }
+      if (obj.constructor === Date) {
+        return new Date(obj);
+      }
+      if (obj.constructor === RegExp) {
+        return new RegExp(obj);
+      }
+      //注意这里是经典之比 这样会完全的创建一个和传进来对象一摸一样的对象
+      let newObj = new obj.constructor();
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          newObj[key] = typeof obj[key] === 'object' ? clone(obj[key]) : obj[key];
+        }
+      }
+      return newObj;
+    }
+    // 深拷贝的优化写法
+    function clonePlus(obj) {
+      // 闭包用于存储已经拷贝过的对象 避免出现重复引用
+      let weakMap = new WeakMap()
+      // 深拷贝函数
+      function deep(source) {
+        // debugger
+        if (!source) {
+          return null
+        }
+        if (source.constructor === Date) {
+          return new Date(source)
+        }
+        if (source.constructor === RegExp) {
+          return new RegExp(source)
+        }
+        // 之前拷贝过之后 直接返回
+        if (weakMap.has(source)) {
+          return weakMap.get(source)
+        }
+        console.log('进来了')
+        // 获取所有对象的属性值 注意for in/of遍历是无法遍历symbol类型的
+        var keys = [...Object.getOwnPropertyNames(source), ...Object.getOwnPropertySymbols(source)]
+        if (!keys.length) {
+          return source
+        }
+        var target = new source.constructor()
+        weakMap.set(source, target)
+        keys.forEach(key => {
+          let value = source[key]
+          target[key] = (typeof value === 'object' && value) ? deep(value) : value
+        })
+        return target
+      }
+      return deep(obj)
+    }
+  </script>
+</body>
+
+</html>

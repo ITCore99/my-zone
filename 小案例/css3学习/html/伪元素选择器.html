@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><伪元素选择器></伪元素选择器></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box
+        {
+            width: 200px;
+            height:200px;
+            border: 1px solid #000;
+            margin: 50px;
+        }
+        .box::before{
+            content: "我是伪元素选择器before";
+            display: block;
+
+        }
+        .box::after{
+            content: "我是伪元素选择器after";
+            display:block;
+        }
+        .claerFix::after{
+            content:"";
+            display: block;
+            clear: both;
+            overflow: hidden;
+            height: 0;
+            width: 0;
+        }
+        .box2::first-letter{
+            color:red;
+        }
+        .box2::first-line
+        {
+            background: greenyellow ;
+        }
+        p {
+            user-select: none;/***使用此属性可以使文本出现选不中的状态*/
+        }
+        p::selection{
+            color:Red;
+        }
+        .color
+        {
+            width:200px;
+            height:200px;
+            border: 1px solid #000;
+            background: hsl(120,100%,100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+    </div>
+    <div class="box2">
+        我是第一个字符
+    </div>
+    <p>我是一行文字，我需要在选中时变红</p>
+    <div class="color">
+
+    </div>
+</body>
+</html>

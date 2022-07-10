@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin:0px;
+            padding:0px;
+        }
+        #container
+        {
+            width:200px;
+            border: 1px solid #000;
+            height:0;
+            overflow: hidden;
+            transition: height ease 0.3s 
+        }
+    </style>
+</head>
+<body>
+     <button id="btn">点击展开或收缩</button>
+     <div id="container">
+         <p>我是选项1</p>
+         <p>我是选项2</p>
+         <p>我是选项3</p>
+         <p>我是选项4</p>
+         <p>我是选项5</p>
+         <p>我是选项6</p>
+         
+     </div>   
+</body>
+<script>
+    function $(selector) /**封装一个方法实现对元素的选取*/
+    {
+        return document.querySelector(selector);
+    }
+    let btn=$("#btn");
+    let container=$("#container");
+    let isShrink=true;
+    btn.onclick=function()
+    {
+        if(isShrink)
+        {
+
+            isShrink=!isShrink;
+            container.style.height='auto';
+            let high=container.offsetHeight;
+            container.style.height='0px';
+            // container.style.transition='height ease 0.5s';
+            container.offsetHeight;/**注意这句话的作用是让浏览器显示的计算高度因为当高度由auto变到0再到auto是浏览器认为没有变化所以就直接跳过了变到0直接变到auto所以这样就没有了突变所以就不会出现过度动画了一定注意。*/
+            container.style.height=high+'px';
+        }else
+        {
+            container.style.height=0;
+            isShrink=!isShrink;
+        }
+
+    }
+</script>
+</html>

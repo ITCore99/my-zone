@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        #test {
+            background: gray;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            margin:  auto;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="test" width="800" height="500"></canvas>
+    <script>
+        //rotate是将坐标轴沿顺时针旋转
+        var canvas = document.querySelector('#test');
+        if(canvas.getContext) {
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle='#000';
+            //填充的矩形
+            ctx.fillRect(10,10,100,100);
+        
+            ctx.strokeStyle='red';
+            ctx.lineWidth = 20;
+            ctx.lineJoin = 'bevel';
+            //边框的矩形 边线画法规则是往上一像素 往下一像素
+            ctx.strokeRect(110,110.5,100,100);
+            ctx.moveTo(200,10);
+            ctx.lineTo(200,50);
+            ctx.lineTo(250,50);
+            // ctx.lineTo(200,10);
+            ctx.lineWidth=5;
+            ctx.closePath();
+            ctx.stroke();
+            //fill会自动的闭合路径 stroke不会自动闭合 需要手动闭合
+         
+
+            //beginPath清空路径容器 
+            ctx.beginPath();
+            ctx.moveTo(300,10);
+            ctx.lineTo(300,50);
+            ctx.lineTo(350,50);
+            ctx.lineWidth=5;
+            ctx.closePath();
+            ctx.stroke();
+            ctx.fill(); 
+
+            ctx.beginPath();
+            ctx.moveTo(400,50);
+            ctx.lineTo(450,50);
+            //线的末端样式
+            ctx.lineCap='round'
+            ctx.stroke();
+            //注意在使用canvas时的时候最好向save() ctx.beginPath() ctx.restore()
+            //save进行样式压栈
+            ctx.save(); 
+            //样式逻辑
+            ctx.strokeStyle = 'pink';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            //关于路径
+            ctx.strokeRect(500,100,50,50);
+            //还原上一次画笔的样式 样式栈出栈
+            ctx.restore();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(300,300);
+            //画圆
+            ctx.arc(300,300,50,0,(90*Math.PI)/180,true);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
+            
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(100,300);
+            //画圆弧
+            ctx.arcTo(200,50,200,200,50);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+        }
+    </script>
+</body>
+</html>

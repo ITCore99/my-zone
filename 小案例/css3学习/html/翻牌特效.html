@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin:0px;
+            padding:0px;
+        }
+        .container
+        {
+            margin: 20px;
+        }
+        body{
+            background: skyblue;
+        }
+        ul{
+            overflow: hidden;
+            transform-style:preserve-3d;
+        }
+        li{
+            position: relative;
+            float:left;
+            margin-left:20px;
+            transform-style:preserve-3d;
+            width:228px;
+            height:353px;
+            list-style-type:none;
+            transition:all linear .5s;
+        }
+        label{
+            display: block;
+        }
+        li div
+        {
+            position:absolute;
+            left:0px;
+            top:0px;
+            width:228px;
+            height:353px;
+            background-size: 100% 100% !important;
+        }
+        li:nth-child(1) .force
+        {
+            background: url("../images/liuyifei.jpg");
+        }
+        li:nth-child(1) .back {
+            background: url("../images/puke.jpg");
+        }
+        li:nth-child(2) .force
+        {
+            background: url("../images/xiaoxiannv.jpg");
+        }
+        li:nth-child(2) .back {
+            background: url("../images/puke.jpg");
+        }
+        li:nth-child(3) .force
+        {
+            background: url("../images/fengjie.jpg");
+        }
+        li:nth-child(3) .back {
+            background: url("../images/puke.jpg");
+        }
+        .force{
+            transform: rotateY(180deg);
+            backface-visibility: hidden;                                                        /**注意这个只是隐藏被旋转元素的背面而不是将整个元素进行隐藏*/
+        }
+        input{
+            display: none;
+        }
+        .back
+        {
+            backface-visibility: hidden;
+        }
+        #first:checked ~ul li:nth-child(1)
+        {
+            transform: rotateY(180deg);
+        }
+        #second:checked ~ul li:nth-child(2)
+        {
+            transform: rotateY(180deg);
+        }
+        #third:checked ~ul li:nth-child(3)
+        {
+            transform: rotateY(180deg);
+        }
+        .clear
+        {
+            width:100px;
+            font-size:20px;
+            color:#fff;
+            font-weight: bold;
+            text-align: center;
+            height:50px;
+            line-height: 50px;
+            background: orangered;
+            border-radius:6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="radio" id="first" name="radio"/>                                                               <!--注意这里对单选框的妙用，可以实现不用js代码而实现一开一合的效果，同时也需要注意label和input联合的使用可以实现当点击input框是显示包到label里面我们要显示的内容-->
+        <input type="radio" id="second" name="radio"/>
+        <input type="radio" id="third" name="radio"/>
+        <input type="radio" id="clear" name="radio"/>
+        <ul>
+            <li>
+                <label for="first">
+                    <div class="force"></div>
+                    <div class="back"></div>
+                </label>
+            </li>
+            <li>
+                <label for="second">
+                    <div class="force"></div>
+                    <div class="back"></div>
+                </label>
+            </li>
+            <li>
+                <label for="third">
+                    <div class="force"></div>
+                    <div class="back"></div>
+                </label>
+            </li>
+            <li>
+                <label for="clear" class="clear">
+                    清空
+                </label>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

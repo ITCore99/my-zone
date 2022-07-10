@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>函数编程之柯里化</title>
+</head>
+
+<body>
+  <script>
+    /**首先这里我们对函数的柯力化进行定义：所谓的柯力化就是将一个使用多个参数的函数转换为一系列使用一个参数的函数的技术。例如：function add(a,b,c) {}; var newAdd= Curry(add)之后我们就可以这样调用了newAdd(1)(2)(3)**/
+    /**我们首先定义一个function**/
+    function add(a, b, c, d) {
+      return a + b + c + d;
+    }
+    /**如果我们要定于函数让他实现的功能让是这样
+    function fixedParamsCurry(fn) {
+
+    }
+    var newAdd = fixedParamsCurry(add,1,2);
+    newAdd(3,4);
+    也就是实现函数的接力参数的调用就是参数进行累加的去调用但我们的参数累加到达到我们参数要求的数量是才进行执行。
+    我们来实现这个参数。
+    */
+    /**这个函数时必须要求下次凑齐参数的固定参数函数也就是这个函数是生成一个新的固定参树的函数*/
+    function fixedParamsCurry(fn) {
+      /**获取传入的参数*/
+      var _args = Array.prototype.slice.call(arguments, 1);
+      return function () {
+        /***合并两次传递的参数*/
+        var newArgs = _args.concat([].slice.call(arguments, 0));
+        return fn(...newArgs);
+      }
+    }
+    /**测试fixedParamsCurry*/
+    let newAdd = fixedParamsCurry(add, 1);
+    let num = newAdd(2, 3, 4);
+    // console.log(num);
+    /**从我们的测试结果来看的话确实应该是没有问题的 注意这里我在进行对fixedParamsCurry在进行说明加这个函数返回宇哥新的固定参数的函数 这个固定参数的函数的参数可以小于也可以等于原函数，他要求你下一次一定要传够参数**/
+    /*实现正真的柯力化函数 要达到的目的是：var newAdd = curry(add) 我们可以这样调用它newAdd(1,2,3,4) 或者可以这样调用newAdd(1,2)(3,4) 或者可以是newAdd(1)(2)(3)(4) 柯力化函数总是期待你下一次将参数全部的传完 传完之后他在进行执行*/
+    /**fn是一个固定参数的函数*/
+    function curry(fn, length) {
+      /**这里的操作是传入函数所需要的参数个数fn.length是取函数的形参个数**/
+      var length = length || fn.length;
+      return function () {
+        if (arguments.length < length) {        //传入的参数不够执行时所需要的参数个数
+          var combine = [fn].concat([].slice.call(arguments, 0));
+          return curry(fixedParamsCurry(...combine), length - arguments.length);
+        } else {        //传入的参数符合函数执行时的参数个数
+          return fn(...arguments);
+        }
+      }
+    }
+    /**测试我们的柯力化函数*/
+    // let curryNewAdd = curry(add);
+    // console.log("curry", curryNewAdd(1, 2, 3, 4))
+    // console.log("curry", curryNewAdd(1)(2)(3)(4));
+    // console.log("curry", curryNewAdd(1, 2)(3, 4));
+    // 支持多参数传递
+    function progressCurrying(fn, args) {
+      let _this = this
+      let len = fn.length;
+      // 注意 这里不能args闭包变量来进行数组长度 否则args会一直积累 导致当curryNewAdd第二次调用时会超出length的长度
+      var args = args || [];
+      return function () {
+        let _args = Array.prototype.slice.call(arguments);
+        Array.prototype.unshift.apply(_args, args);
+        // 如果参数个数小于最初的fn.length，则递归调用，继续收集参数
+        if (_args.length < len) {
+          return progressCurrying.call(_this, fn, _args);
+        }
+        // 参数收集完毕，则执行fn
+        return fn.apply(this, _args);
+      }
+    }
+    let curryNewAdd = myCurry(add);
+    // console.log("curry", curryNewAdd(1, 2, 3, 4))
+    console.log("curry", curryNewAdd(1, 2)(3)(4));
+    console.log("curry", curryNewAdd(1)(2)(3)(4));
+    function myCurry(fn, args = []) {
+      // 获取当前函数总需要的参数
+      var len = fn.length
+      //利用闭包特性保存参数
+      args = args
+      var _this = this
+      return function () {
+        let _args = [].slice.call(arguments)
+          ;[].unshift.apply(_args, args);
+        if (_args.length < len) {
+          return myCurry.call(_this, fn, _args)
+        }
+        return fn.apply(this, _args)
+      }
+    }
+    // 实现一个add方法，使计算结果能够满足如下预期：
+    // add(1)(2)(3) == 6;
+    // add(1, 2, 3)(4) == 10;
+    // add(1)(2)(3)(4)(5) == 15;
+    function add2() {
+      let args = [].slice.call(arguments)
+      var addMap = function () {
+        [].push.apply(args, arguments)
+        return addMap
+      }
+      addMap.valueOf = function () {
+        return args.reduce((prev, curr) => prev + curr, 0)
+      }
+      addMap.toString = function () {
+        return args.reduce((prev, curr) => prev + curr, 0)
+      }
+      return addMap
+    }
+    console.log(add2(1)(2)(3).toString())
+    console.log(add2(1, 2, 3)(4) == 10)
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .clearFix::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      clear: both;
+    }
+
+    .container {
+      background: #0000;
+      width: 500px;
+      height: 200px;
+      margin: 50px auto;
+      border: 1px solid #000;
+      overflow: hidden;
+    }
+
+    ul {
+      width: 2000px;
+      height: 200px;
+      list-style-type: none;
+      animation-name: go;
+      animation-duration: 6s;
+      animation-timing-function: ease;
+      animation-iteration-count: infinite;
+    }
+
+    ul li {
+      width: 300px;
+      height: 200px;
+      float: left;
+    }
+
+    .container:hover ul {
+      animation-play-state: paused;
+    }
+
+    ul:hover li {
+      opacity: 0.8;
+    }
+
+    ul vli:hover {
+      opacity: 1;
+    }
+
+    @keyframes go {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-1200px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <ul class="clearFix">
+      <li>
+        <img src="../images/01.jpg" />
+      </li>
+      <li>
+        <img src="../images/02.jpg" />
+      </li>
+      <li>
+        <img src="../images/03.jpg" />
+      </li>
+      <li>
+        <img src="../images/04.jpg" />
+      </li>
+      <li>
+        <img src="../images/01.jpg" />
+      </li>
+      <li>
+        <img src="../images/02.jpg" />
+      </li>
+    </ul>
+  </div>
+</body>
+
+</html>

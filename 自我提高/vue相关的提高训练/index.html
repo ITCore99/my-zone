@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+
+<body>
+  <!-- 注意1: 在使用v-html时需要注意的一点是我们在内部不能子组件，会覆盖子组件-->
+  <!-- 
+    注意2: watch使用深度监听时是无法获取的oldValue。因为引用类型是指针赋值的关系 变化了之后oldvalue也是指向改变后的值。
+  -->
+  <!-- 
+    在Vue中的event对象是原生的Event对象Vue并没有对其进行处理,而React则可能不同并不是返回原生的Event对象而是进过了react进行处理过之后的对象
+  -->
+  <!-- 
+    Vue 中的中央数据总线就是一个空的Vue实例 我们再通过对空event.$emit()触发自定义事件 event.$on()监听自定义事件 来进行通信 通常我们在页面销毁后我们就要通过event.$off进行解绑。否则我们可能会出现内存泄漏
+  -->
+  <div id="app">
+    <input type="checkbox" value="fzn" v-model="checkBox">付卓宁
+    <input type="checkbox" value="zzx" v-model="checkBox">张誌藓
+    <input type="checkbox" value="fxx" v-model="checkBox">付小藓
+  </div>
+  <script>
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        info: {
+          city: '北京'
+        },
+        checkBox: []
+      },
+      mounted() {
+        window.setTimeout(() => {
+          this.info.city = '上海'
+          console.log('checkBox', this.checkBox)
+        }, 3000)
+      },
+      watch: {
+        info: {
+          handler(oldValue, newValue) {
+            console.log('oldValue', oldValue, 'newValue', newValue)
+          },
+          deep: true
+        },
+        ['info.city'](oldValue, newValue) {
+          console.log('oldValue2', oldValue, 'newValue', newValue)
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+body {
+    background: red;
+    transform: translate(200px)
+}
+/**没用的样式 我们要使用css-shark插件将他筛掉 不要打包*/ 
+.w {
+    color:#fff;
+    font-size:180px;
+}

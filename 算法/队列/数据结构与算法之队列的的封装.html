@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数据结构与算法之队列的封装</title>
+</head>
+<body>
+    <script>
+        function Queue()  {
+            this.items = [];
+            
+            //队列压入队列
+            Queue.prototype.enqueue = function(item) {
+                this.items.push(item);
+                return this.items.length;
+            }
+            //出队列
+            Queue.prototype.dequeue = function() {
+                return this.items.shift();
+
+            }
+            //队列长度
+            Queue.prototype.size = function() {
+                return this.items.length;
+            }
+            //判断队列是否为空
+            Queue.prototype.isEmpty = function() {
+                return this.items.length == 0;
+            }
+            //返回队列元素
+            Queue.prototype.toString = function() {
+                let str = "";
+                this.items.forEach(item => {
+                    str+= item + ",";
+                });
+                return str;
+            },
+            //返回第一个队列元素
+            Queue.prototype.peek = function() {
+                return this.items[0];
+            }
+        }
+        // let queue = new Queue();
+        // queue.enqueue("1");
+        // queue.enqueue("2");
+        // queue.enqueue("3");
+        // //alert(queue.toString());
+        // queue.dequeue();
+        // //alert(queue.toString());
+        // queue.enqueue("4");
+        //alert(queue.toString());
+        
+        /**
+         * 队列的实例使用击鼓传花的实现
+         */
+        function passGame(arr,n) {
+            let myQueue = new Queue();
+            //先将数组全部推入队列中
+            let len = arr.length;
+            for(let i = 0; i <  arr.length; i++ ) {
+                myQueue.enqueue(arr[i]);
+            }
+            while(myQueue.size() > 1) {
+                 //把小于约定书数的数据继续的压入队列
+                for(let j = 0; j < n - 1; j++) {
+                    //myQueue.enqueue(arr[j]);
+                    myQueue.enqueue(myQueue.dequeue());     //注意这里一定要先从队列中删除在添加到队列中
+                }
+                //将等于约定数的数据进行出栈处理
+                myQueue.dequeue();
+            }
+            if(myQueue.size() == 1) {
+                let item = myQueue.peek();
+                let index = arr.findIndex(element => item == element);
+                return `最终留下来的人是：${item},位置是：${index}`;
+            }
+        }
+        let friends = ['小明','小红','小马','小龙','小兰','小藓','小付'];
+        alert(passGame(friends,3));
+
+    </script>
+</body>
+</html>

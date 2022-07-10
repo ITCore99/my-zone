@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>css3的属性选择器</title>
+    <style>
+        *{
+            margin: 0;
+            padding:0;
+        }
+        div{
+            width:100px;
+            height:100px;
+            background: #f00;
+            margin:50px;
+        }
+        /*div[title="998"]{*/
+            /*background: yellow;*/
+        /*}*/
+        /*[title]{*/
+            /*background:yellow;*/
+        /*}*/
+        /*[title="998"]{*/
+            /*background: yellow;*/
+        /*}*/
+        /*[title*="998"]{!**title属性包含998*!*/
+            /*background: deepskyblue;*/
+        /*}*/
+        /*[title^="998"]{!***title属性是以998开头*!*/
+            /*background: purple;*/
+        /*}*/
+        /*[title$="998"]{!**title属性是以998结尾*!*/
+            /*background: orange;*/
+        /*}*/
+        /*[title~="998"]{!**title属性里面的值包含空格，且是以998开头但是第一个也能选中*!*/
+            /*background: deeppink;*/
+        /*}*/
+        /*[title|="998"]{*//**title属性值以998开头998与后面的属性值是以-分隔的。第一个也可以选中*/
+            /*background: gold;*/
+        /*}*/
+    </style>
+</head>
+<body >
+    <div title="998" class="box"></div>
+    <div></div>
+    <p title="8999998">我是p标签的998</p>
+    <div title="998 xxx"></div>
+    <div title="998-xxx"></div>
+</body>
+</html>

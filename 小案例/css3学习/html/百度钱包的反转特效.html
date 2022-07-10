@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;padding:0;
+        }
+        html
+        {
+            background:pink;
+        }
+        .container
+        {
+            width:300px;
+            height:300px;
+            margin:50px auto;
+            position: relative;
+        }
+        .container div
+        {
+            width:300px;
+            height:300px;
+            position:absolute;
+            top:0;
+            left:0;
+            border-radius:50%;
+            backface-visibility:hidden;/**当元素的背面朝向观众时元素隐藏*/
+            transition:transform ease  2s;
+        }
+        .container:hover div.force
+        {
+            transform:rotateY(180deg);
+        }
+        .container:hover div.back
+        {
+            transform:rotateY(0deg); /**问老这个类是干什么的出来的*/
+        }
+        .force
+        {
+            background: url("../images/wallet.png") no-repeat;
+            background-position: 0 -1995px;
+        }
+        .back
+        {
+            transform: rotateY(180deg);       /**让上层backdiv默认旋转为背面面向观众使其隐藏，让forcediv显示出来*/
+            background: url("../images/wallet.png") no-repeat;
+            background-position: -300px -1995px;
+        }
+    </style>
+</head>
+<body>
+   <div class="container">
+       <div class="force"></div>
+       <div class="back"></div>  <!-这里使用了相对定位他们都在同一个位置backdiv在后面所以backdiv会覆盖掉forcediv-->
+   </div>
+</body>
+</html>

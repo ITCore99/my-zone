@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <input type="text" id="input">
+  <button onclick="handleCancle()">暂停</button>
+  <button onclick="handleFlush()">立即执行</button>
+  <script>
+    let inputDom = document.querySelector('#input')
+
+    function handle(event) {
+      console.log('this', this.style.color = 'red', event)
+    }
+
+    let debounceFun = debouncePlus(handle, 2000)
+    inputDom.addEventListener('input', debounceFun)
+
+    function handleCancle() {
+      debounceFun.cancle();
+    }
+
+    function handleFlush() {
+      debounceFun.flush()
+    }
+
+    function debouncePlus(func, wait = 0) {
+      let timer = null
+      let args
+
+      function debounced(event) {
+        args = arguments 
+        if (timer) {
+          window.clearTimeout(timer)
+        }
+        // 以promise的形式返回函数执行的结果
+        return new Promise((resolve, reject) => {
+          timer = window.setTimeout(async () => {
+            try {
+              const result = await func.apply(this, args)
+              resolve(result)
+            } catch (error) {
+              reject(e)
+            }
+          }, wait)
+        })
+      }
+      // 允许取消
+      function cancle() {
+        window.clearTimeout(timer)
+      }
+      // 允许立即执行
+      function flush() {
+        cancle()
+        func.apply(this, args)
+      }
+
+      debounced.cancle = cancle
+      debounced.flush = flush
+
+      return debounced
+    }
+  </script>
+</body>
+
+</html>

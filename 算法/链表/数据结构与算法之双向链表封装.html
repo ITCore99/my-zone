@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数据结构与算法之双向链表的封装</title>
+</head>
+<body>
+    <script>
+        function DoubleLinkedList() {
+            function Node(data) {
+                this.data = data;
+                this.prev = null;
+                this.next = null;
+            }
+            this.head = null;         //指向第一个节点元素
+            this.tail = null;        //指向最后一个节点元素
+            this.length = 0;        //保存节点的数量
+            //append方法是向链表的末尾插入一个元素
+            DoubleLinkedList.prototype.append = function(data) {
+                let newNode = new Node(data);
+                if(this.length == 0) {      //当列表中无数据时
+                    this.head = newNode;
+                    this.tail = newNode;
+                } else {        //当列表中有数据时
+                    let current = this.head;
+                    while(current.next) {
+                        current = current.next;
+                    }
+                    newNode.prev = current;
+                    current.next = newNode;
+                    this.tail = newNode;
+                }
+                this.length += 1;
+            }
+            //insert方法是向指定的位置插入元素
+            DoubleLinkedList.prototype.insert = function(position,data) {
+                if(position < 0 ||position > this.length) {
+                    throw new Error("数组越界异常")
+                }
+                let newNode = new Node(data);
+                if(this.length == 0) {      //判断链表是否为空
+                    this.head = newNode;
+                    this.tail = newNode;
+                } else {
+                    if(position== 0) {      //判断是不是第一个节点
+                        newNode.next = this.head
+                        this.head.prev = newNode;
+                        this.head = newNode
+                    } else if(position == this.length) {  //插入到最后一个节点
+                       newNode.prev = this.tail;
+                       this.tail.next = newNode;
+                       this.tail = newNode;
+                    } else {        //插入到中间的情况
+                       let index = 0
+                       let current = this.head;
+                       while(index++ < position) {
+                           current = current.next;
+                       }
+                       newNode.prev = current.prev;
+                       current.prev.next = newNode;
+                       current.prev = newNode;
+                       newNode.next = current;
+                    }
+
+                }
+                this.length += 1;
+                
+            }
+            //toString方法是将双向链表的数据以字符串的形式输出出来
+            DoubleLinkedList.prototype.toString = function() {
+               return this.backForward();
+            }
+            //backForward方法是将链表中的数据从前向后输出连接成字符串输出
+            DoubleLinkedList.prototype.backForward = function() {
+                let  current = this.head;
+                let  doubleLinkedListStr = "";
+                while(current) {
+                    doubleLinkedListStr += current.data +";"
+                    current = current.next;
+                }
+                return  doubleLinkedListStr;
+            }
+            //forWard方法是将链表中的数据从后向前进行遍历连接成字符串进行输出
+            DoubleLinkedList.prototype.forWard = function() {
+                let current = this.tail;
+                let doubleLinkedListStr = "";
+                while(current) {
+                    doubleLinkedListStr += current.data + ";"
+                    current = current.prev;
+                }
+                return doubleLinkedListStr;
+            } 
+            //get方法得到指定下标下元素
+            DoubleLinkedList.prototype.get = function(position) {
+                let middle = ~~this.length / 2;  //向下取整
+                let index = 0;
+                if(position <= middle) {    //从前向后查找
+                    let index = 0;
+                    let current = this.head;
+                    while(index++ < position) {
+                        current = current.next;
+                    }
+                    console.log("从前向后查找");
+                    return current.data;
+                } else {        //从后向前查找
+                    let index = this.length-1;
+                    let current = this.tail;
+                    while(index-- > position) {
+                        current = current.prev;
+                    }
+                    console.log("从后向前查找");
+                    return current.data;
+                }
+            }   
+            //indexOf 方法是找到元素在链表中下标
+            DoubleLinkedList.prototype.indexOf = function(data) {
+                let current = this.head;
+                let index = 0;
+                while(current) {
+                    if(current.data == data) {
+                        return  index;
+                    } 
+                    index += 1;
+                    current = current.next;
+                }
+                return -1;
+            } 
+            //update 修改指定位置上的元素
+            DoubleLinkedList.prototype.update = function(position,data) {
+                if(position < 0 || position > this.length - 1) {
+                    throw new Error("越界异常")
+                }
+                let index = 0;
+                current = this.head;
+                while(index++ < position) {
+                    current = current.next;
+                }
+                current.data = data;
+                return true;
+            }
+            //removeAt删除指定位置上的元素
+            DoubleLinkedList.prototype.removeAt = function(position) {
+                if(position < 0 || position > this.length - 1) {
+                    throw new Error("越界异常")
+                }
+                let current;
+                let index;
+                if(position == 0) {  //删除第一个元素
+                    this.head = this.head.next;
+                    this.head.next.prev = null;
+                }else if(position == this.length - 1) { //删除最后一个元素
+                    this.tail.prev.next = null;
+                    this.tail = this.tail.prev;
+                } else {    //删除中间元素
+                    let middle = ~~this.length / 2;
+                    if(position <= middle) {        //从前向后查找
+                        index = 0;
+                        current = this.head;
+                        while(index++ < position) {
+                            current = current.next;
+                        }
+                        console.log("前==>后查找")
+                    } else { //从后向前遍历
+                        index = this.length - 1;
+                        current = this.tail;
+                        while(index-- > position) {
+                            current = current.prev;
+                        }
+                        console.log("后==>前查找")
+                    }
+                    current.prev.next = current.next;
+                    current.next.prev =current.prev
+                }
+                this.length -= 1;
+            }     
+
+        }
+        //测试
+        let doubleLinkedList = new DoubleLinkedList();
+        //测试双向链表的append方法和toString方法
+        doubleLinkedList.append("abc");
+        doubleLinkedList.append("123");
+        doubleLinkedList.append("456");
+        //测试insert方法
+        doubleLinkedList.insert(0,"小付");
+        doubleLinkedList.insert(1,"小付2");
+        //测试get方法
+        // alert(doubleLinkedList.get(1));
+        // alert(doubleLinkedList.get(3));
+        //测试indexOf
+        // alert(doubleLinkedList.indexOf("123"));
+        // alert(doubleLinkedList.indexOf("123999"));
+        //测试update
+        // doubleLinkedList.update(1,"小藓");
+        //测试removeAt方法
+        // doubleLinkedList.removeAt(0);
+        // doubleLinkedList.removeAt(4);
+        doubleLinkedList.removeAt(3);
+        alert(doubleLinkedList);
+        // alert(doubleLinkedList.forWard());
+        
+    
+    </script>
+</body>
+</html>

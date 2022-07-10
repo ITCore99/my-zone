@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数据代理</title>
+
+    <script src='./mvvm/compile.js'></script>
+    <script src='./mvvm/observer.js'></script>
+    <script src='./mvvm/watcher.js'></script>
+    <script src='./mvvm/mvvm.js'></script>
+</head>
+<body>
+    <h3>数据代理</h3>
+    <p>所谓的数据代理：通过一个对象代理对另一个对象中的属性的操作(读/写)</p>
+    <p>Vue数据代理：通过vm对象来代理data对象中所有属性的操作</p>
+    <p>基本实现流程</p>
+    <ul>
+        <li>通过Object.defineProperty()给vm添加与data对象的属性对应的属性描述符</li>
+        <li>所有添加的属性都包含getter/setter</li>
+        <li>getter/setter内部去操作data中对应的属性数据</li>
+    </ul>
+    <h3>数据绑定</h3>
+    <p>所谓数据绑定：就是一旦更新了data中某一个属性数据，所有的界面上直接使用或者间接使用了此属性的节点会更新</p>
+    <p>数据劫持</p>
+    <ul>
+        <li>数据劫持是vue中用来实现数据绑定的一种技术</li>
+        <li>基本思想：通过defineProperty()来监视data中所有属性(任意层次)数据的变化,一旦变化就实现更新</li>
+    </ul>
+    <div id="app">
+        <p v-on:click="handlerClick">{{name}}</p>
+        <p v-html='vHtmlTest'></p>
+        <button v-on:click='handlerUpdate'>更新</button>
+    </div>
+    <script>
+        let mvvm = new MVVM({
+            el: '#app',
+            data: {
+                name: 'mvvm',
+                vHtmlTest: '<span style="color:red">test v-html</span>'
+            },
+            methods: {
+                handlerClick() {
+                    alert('点击了')
+                },
+                handlerUpdate() {
+                    console.log('this',this);
+                    this.name = '更新后的mvvm'
+                }
+            }
+        });
+        console.log(mvvm);
+    </script>
+</body>
+</html>

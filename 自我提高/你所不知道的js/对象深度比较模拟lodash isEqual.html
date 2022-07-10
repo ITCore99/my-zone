@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>模拟lodash isEqual</title>
+</head>
+
+<body>
+  <script>
+    // 判断是不是对象
+    function isObject(data) {
+      return typeof data === 'object' && data !== null
+    }
+    // 判断全相等函数
+    function isEqual(source1, source2) {
+      if (!isObject(source1) || !isObject(source2)) {
+        return source1 === source2
+      }
+
+      const source1Key = [...Object.getOwnPropertyNames(source1), ...Object.getOwnPropertySymbols(source1)]
+      const source2Key = [...Object.getOwnPropertyNames(source2), ...Object.getOwnPropertySymbols(source2)]
+
+      if (source1Key.length !== source2Key.length) {
+        return false
+      }
+      // 注意(这里就不能使用forEach)forEach是没法通过return终止程序 
+      for (let i = 0; i < source1Key.length; i++) {
+        const key = source1Key[i]
+        const value1 = source1[key]
+        const value2 = source2[key]
+        if (value1 && typeof value1 === 'object') {
+          const res = isEqual(value1, value2)
+          if (!res) {
+            return false
+          }
+        } else {
+          if (value1 !== value2) {
+            return false
+          }
+        }
+      }
+      return true
+    }
+    // 测试
+    const obj1 = { name: 'fzn', age: '23', wife: ['张誌藓', '严舒'] }
+    const obj2 = { name: 'fzn', age: '23', wife: ['张誌藓'] }
+    console.log('我喜欢张誌藓，超级无敌喜欢', isEqual(obj1, obj2))
+  </script>
+</body>
+
+</html>

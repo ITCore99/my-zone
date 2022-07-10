@@ -1,0 +1,130 @@
+
+@mixin progressMixin{
+    .wrap {
+        display: flex;
+        align-items: center;
+        position: relative;
+        height: 3px;
+        margin-top:11px;
+        background: #737373;
+        cursor: pointer;
+        .inner {
+            position: absolute;
+            left:0;
+            width:9px;
+            height: 7px;
+            border-radius: 2px;
+            background: #fff;
+            cursor: pointer;
+            z-index:2;
+        }
+    }
+    .wrap2 {
+        position:absolute;
+        top:11px;
+        height: 3px;
+        background: deeppink;
+    }
+}
+* {
+    padding:0;
+    margin:0;
+}
+.wrapper {
+    width: 100vw;
+    height: 100vh;
+    background: #666;
+    overflow-y: hidden;
+    overflow-x:auto;
+    // overflow: hidden;
+    font-size: 0;
+    .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 25px;
+        background: #2A2A2A;
+        cursor: pointer;
+        & > div {
+            height: 100%;
+        }
+        .btns {
+            font-size: 16px;
+            width: 60px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            & > div {
+                width: 50%;
+                height: 100%;
+            }
+            .start {
+                text-align: center;
+                line-height: 25px;
+            }
+            .stop {
+                text-align: center;
+                line-height: 25px;
+            }
+        }
+        .progress {
+            min-width: 400px;
+            flex-grow: 1;
+            position: relative;
+            margin-right: 5px;
+            @include progressMixin()
+        }
+        .others {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size:14px;
+            width:250px;
+            height: 100%;
+            color:#fff;
+            & > div {
+                height: 100%;
+            }
+            .time {
+                width: 120px;
+                font-size: 12px;
+                text-align: center;
+                span {
+                    line-height: 25px;
+                }
+            }
+            .sound {
+                width: 100px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                .soundIcon {
+                    width: 20%;
+                    height: 100%;
+                    font-size: 12px;
+                    color: #fff;
+                    text-align: center;
+                    line-height: 25px;
+                }
+               .sound-progress {
+                    width: 80%;
+                    height: 25px;
+                    position: relative;
+                    line-height: 25px;
+                    @include progressMixin()
+               }
+            }
+            .fullScreen {
+                width: 30px;
+                font-size: 16px;
+                text-align: center;
+                height: 25px;
+                color:#fff;
+                span {
+                    transform:  rotateZ(45deg);
+                }
+            }
+        }
+    }
+}

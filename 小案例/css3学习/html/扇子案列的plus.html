@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        .container
+        {
+            width:400px;
+            height:250px;
+            margin:50px auto;
+        }
+        .box
+        {
+            transition:transform linear 2s;
+            transform-origin:center 202px;
+        }
+        .container:hover .box
+        {
+            transform: rotate(180deg);
+        }
+        img
+        {
+            vertical-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <img src="../images/39.jpg" onclick="ddd"/>
+        </div>
+    </div>
+</body>
+<script>
+    function $(selector)
+    {
+        return document.querySelector(selector);
+    }
+    let btn=$("img");
+    btn.onclick=function(e)
+    {
+        console.log(e.clientX,e.clientY);
+    }
+</script>
+</html>

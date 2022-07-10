@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #alert{
+      position: fixed;
+      top:10vh;
+      left:50%;
+      display: inline-block;
+      padding: 10px 5px;
+      min-width: 150px;
+      background: lightgreen;
+      color:#fff;
+      border-radius: 4px;
+      transform: translateX(-50%);
+      /* transition: top ease 2s; */
+      cursor: pointer;
+      border: #00000030;
+      animation: move 0.5s linear;
+    }
+    @keyframes move {
+      0% { 
+        top: 0;
+      }
+      100% {
+        top: 5vh;
+      }
+    }
+    #alert > .msg {
+      font-size: 14px;
+      float: left;
+      margin-left: 8px;
+    }
+    #alert > .close {
+      font-size: 12px;
+      float: right;
+      margin-right: 8px;
+    }
+    #alert > .close:hover {
+      color:#f00;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <my-button></my-button>
+  </div>
+  <script>
+    let template = `<button @click="handleClick">Click Me</button>`
+    Vue.component('my-button', {
+      template,
+      methods: {
+        handleClick () {
+          this.$alert('保存成功 ');
+        } 
+      }
+    });
+    let alertExtend = Vue.extend({
+      template: `
+      <div  id="alert">
+        <span class="msg">{{msg}}</span>
+        <span class="close" @click="hide">X</span>
+      </div>`
+    });
+
+    function alert(msg ) {
+      let div = document.createElement('div');
+      div.setAttribute('id','alert');
+      document.body.appendChild(div);
+      new alertExtend({
+        props: {
+          msg: {
+            type: String,
+            default: msg
+          }
+        },
+        methods: {
+          hide() {
+            document.body.removeChild(document.querySelector('#alert'));
+          }
+        }
+      }).$mount('#alert');
+      let timer = window.setTimeout(() => {
+        let div = document.querySelector('#alert');
+        document.body.removeChild(div);
+        window.clearTimeout(timer);
+      }, 3000);
+    }
+    Vue.prototype.$alert = alert;
+    let vm = new Vue({
+      el: '#app'
+    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>栈的封装</title>
+</head>
+<body>
+    <script>
+        //栈的构造函数 注意最好使用原型来共享方法 节约内存 注意细节一定 写之前一定多思考
+        function Stack() {
+            this.items = [];
+        }
+        //压栈操作
+        Stack.prototype.push = function(item) {
+            return this.items.push(item);
+        };
+        //出栈操作
+        Stack.prototype.pop = function(item) {
+                return this.items.pop(item);
+        };
+        //查看栈定元素
+        Stack.prototype.peek = function(item) {
+            return this.items[this.items.length - 1];
+        };
+        //判断栈是否为空栈
+        Stack.prototype.isEmpty = function() {
+            return this.items.length == 0;
+        };
+        //返回栈的长度
+        Stack.prototype.size = function() {
+            return this.items.length;
+        };
+        //返回栈元素字符串
+        Stack.prototype.toString = function() {
+            let str = "";
+            this.items.forEach(item => {
+                str += item.valueOf();
+                // console.log("toString",item.toString(),typeof item.toString()); //字符串 object先调用valueOf 不符合在调用 toString()
+                // console.log("valueOf",item.valueOf(),typeof item.valueOf());    //对象
+            });
+            return str;
+        }
+        //栈结构的一个应用实践10进制转化为任意进制的算法 核心思想是短除法
+        function tenTransitionBin(number,radix) {
+            let result = "";
+            let len = 0;
+            let tempResult = number;
+            let stack = new Stack();
+            do{
+                stack.push(tempResult % radix);
+                tempResult = Number.parseInt((tempResult/radix));
+            }while (tempResult > 0);
+            len = stack.size();
+            for(let i = 0; i < len;i++) {
+                result += stack.pop();
+            }
+            return result;
+        }
+        console.log(tenTransitionBin(100,2));
+        console.log(tenTransitionBin(100,8));
+        // 2 5 0
+        // 2 2 1
+        // 2 1 0
+        // 2 0 1
+    </script>
+</body>
+</html>

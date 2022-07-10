@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    let treeData = [
+    {
+        name: "一级",
+        id:"0",
+        pid: "-1",
+        children:[
+        {
+            name:"1-1",
+            id:"1",
+            pid: "0",
+            children:[{
+                name: "1-1-1",
+                id: "2",
+                pid: "1"
+            }]
+        },
+        {
+            name: "1-2",
+            id:"3",
+            pid: "0",
+            children: []
+        }]
+    }];
+let pid = "1"
+function findById(data) {
+    //debugger
+    if(data[i].children.length == 0) {
+        if(data[i].id == pid ) {
+            return data[i].name
+        }
+    } else {
+        arguments.callee(data[i].children);
+    }
+}
+    console.log(findById(treeData));
+    findById(treeData)
+</script>
+</body>
+</html>

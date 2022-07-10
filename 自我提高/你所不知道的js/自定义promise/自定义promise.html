@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>自定义promise库</title>
+  <!--引入指定的promise-->
+  <script src="./promise.js"></script>
+</head>
+
+<body>
+  <script>
+    // let p = new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     //    resolve("成功");
+    //     reject("失败")
+    //   }, 0)
+    // });
+    // p.then((value) => {
+    //   console.log("onResolved1", value);
+    // }, (reason) => {
+    //   console.log("onRejected1", reason);
+    // });
+    // p.then((value) => {
+    //   console.log("onResolved2", value);
+    // }, (reason) => {
+    //   console.log("onRejected2", reason);
+    // })  
+  </script>
+  <script>
+            // let p2 = new Promise((resolve,reject) => {
+            //     setTimeout(() => {
+            //     //    resolve("1");
+            //           reject("2")
+            //     },100)
+            // })
+            // .then((value) => {
+            //     console.log("onResolved1",value);
+            //     return value;
+            // },(reason) => {
+            //     console.log("onRejected1",reason);
+            //     throw reason
+
+            // })
+            // .then((value) => {
+            //     console.log("onResolved2",value);
+            // },(reason) => {
+            //     console.log("onRejected2",reason);
+            //     throw reason
+            // }).catch(reason => {
+            //     console.log("onRejected3",reason);
+            // })
+  </script>
+  <script>
+    // let p1 = Promise.resolve("1");
+    // let p2 = Promise.reject("2");
+    // let p3 = Promise.resolve(new Promise.reject("3"));
+    // p1.then(value => {
+    //   console.log("p1", value);
+    // });
+    // p2.catch(reason => {
+    //   console.log("p2", reason);
+    // });
+    // p3.catch(reason => {
+    //   console.log("p3", reason);
+    // })
+
+  </script>
+  <script>
+    Promise.resolve().then(() => {
+      return Promise.reject('拒绝 11')
+    }).then((res) => {
+      console.log(1)
+    }, (err) => {
+      console.log(2)
+      console.log('2的打印', er)
+      return err
+    })
+      .then((res) => {
+        console.log('3的打印', res)
+        console.log(3)
+      }, (err) => {
+        console.log(4)
+        return err
+      }).catch(err => {
+        cosnole.log(5)
+      })
+
+  </script>
+</body>
+
+</html>

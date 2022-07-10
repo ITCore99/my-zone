@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>双飞翼布局</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    div {
+      height: 50px;
+    }
+
+    .left {
+      float: left;
+      background: #f00;
+      width: 300px;
+      margin-left: -100%;
+    }
+
+    .right {
+      float: left;
+      background: #00f;
+      width: 300px;
+      margin-left: -300px;
+    }
+
+    .middle {
+      background: yellow;
+      float: left;
+      width: 100%;
+    }
+
+    .middle .inner {
+      margin-left: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="middle">
+    <div class="inner">中 神鼎飞丹砂 </div>
+  </div>
+  <div class="left">左</div>
+  <div class="right">右</div>
+</body>
+
+</html>

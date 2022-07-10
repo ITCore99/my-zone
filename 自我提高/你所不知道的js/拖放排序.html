@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <style>
+            img {
+              float: left;
+              width: 100px;
+              margin-left: 5px
+            }
+
+            .del {
+              position: relative;
+              border: 1px solid red
+            }
+            .box {
+              position: absolute;
+              height: 100px;
+              width: 100%;
+              text-align: center;
+              line-height: 100px;
+              font-size: 20px;
+              border: 1px solid #f00;
+              cursor: pointer;
+            }
+            .box:nth-child(2n) {
+              background-color: #ddd;
+            }
+        </style>
+</head>
+
+<body>
+  <div class="del" id="del">
+          
+  </div>
+</body>
+<script>
+      var del = document.getElementById("del");
+      // 当前点击的item
+      let box = null, 
+      // 鼠标在item上的offsetY偏移
+          boxY = 0, 
+      // 点击item 对应的数据项 
+          targetBox = null;
+      // 要渲染的数据项
+      var boxList = [
+              {x: 0, y: 0, content: 1},
+              {x: 0, y: 0, content: 2},
+              {x: 0, y: 0, content: 3},
+              {x: 0, y: 0, content: 4},
+              {x: 0, y: 0, content: 5},
+              {x: 0, y: 0, content: 6}
+      ]
+      // 对数据进行渲染
+      function setBox () {
+        var html = ''
+        boxList.forEach((item, index) => {
+                html+= `<div class="box" style="top:${100*index}px">${item.content}</div>`
+        })
+        del.innerHTML= html
+        init()
+      }
+
+      setBox()
+
+      // 初始化
+      function init () {
+        var boxs = Array.prototype.slice.call(document.getElementsByClassName("box"), 0)
+        boxs.forEach(function(item, index) {
+        boxList[index].y = item.offsetTop
+        item.addEventListener('mousedown', function(e) {
+          box = item 
+          boxY = e.offsetY
+          item.style.zIndex = 1
+          // 截取当前的点击item数据项
+          targetBox = boxList.splice(index, 1)
+          del.addEventListener('mousemove', move)
+        })
+        item.addEventListener('mouseup', function(e) {
+          // 获取鼠标抬起时 相对父坐标系的距离
+          let targetY = e.clientY - del.offsetTop - this.clientHeight/2
+          let findIndex = -1
+          boxList.forEach(function(b, v) {
+            // 当鼠标抬起的距离 小于y是 要将这个当前item 插入到这个元素之前
+            if (targetY <= b.y && findIndex == -1) {
+                    findIndex = v
+            }
+          })
+          if (findIndex == -1) {  // 拖到最后一个元素 没有比他大的元素 直接差诶到末尾
+            findIndex = boxList.length;
+          }
+          // 将当前的元素添加到数组中 
+          boxList.splice(findIndex,0,targetBox[0]);
+          // 开始重新渲染渲染新数据
+          setBox();
+          del.removeEventListener('mousemove', move);
+        })
+        })
+      }
+      // 当前点击的item 跟随鼠标移动
+      function move() {
+          let y = event.clientY - del.offsetTop - boxY
+          box.style.top = y + 'px'
+      }
+</script>
+
+</html>

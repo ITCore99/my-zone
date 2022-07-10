@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    .box {
+      width: 3.75rem;
+      height: 50px;
+      background: rebeccapurple;
+    }
+  </style>
+</head>
+
+<body>
+  <greeting22 id="greeting" style="color:red">1111</greeting22>
+  <div class="box"></div>
+  <script>
+    ; (function () {
+      let resizeEvt = 'orientationChange' in window ? 'orientationchange' : 'resize';
+      function updateRem2px() {
+        let deviceWidth = document.documentElement.clientWidth;
+        let rem2px = deviceWidth / 7.5 + 'px';
+        document.documentElement.style.fontSize = rem2px;
+      }
+      if (window.addEventListener) {
+        window.addEventListener(resizeEvt, updateRem2px, false);
+        window.addEventListener('DOMContentLoaded', updateRem2px, false);
+      }
+    })();
+    console.log('xxx', document.getElementById('greeting').style.color = 'green')
+  </script>
+</body>
+
+</html>

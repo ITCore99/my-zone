@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .container {
+      box-sizing: border-box;
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+
+    main {
+      background: green
+    }
+
+    header,
+    footer {
+      height: 100px;
+    }
+
+    header {
+      background: yellow
+    }
+
+    footer {
+      margin-top: -100px;
+      background: red
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 
+    当页面mian主体小于浏览的高度时footer会固定到页面的底部但当主体大于浏览器的高度是footer开始跟随页面向下移动 -->
+  <div class="container">
+    <header>头部</header>
+    <main>主体</main>
+  </div>
+  <footer>底部</footer>
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>伪类选择器</title>
+    <style>
+        /*html{*/
+            /*font-size:20px;*/
+        /*}*/
+        /*:root{!**注意在业界规定当是伪类选择器是我们使用一个：当为伪元素选择器是我们使用：：*!*/
+            /*font-size: 20px;*/
+        /*}*/
+        /*h1{*/
+            /*font-size:1rem;!**rem的单位是根据html中的字体元素来进行换算的*!*/
+        /*}*/
+        /*.box p:nth-child(4)!**x先写儿子如p*!*/
+        /*{*/
+          /*background: deeppink;*/
+        /*}*/
+        /*.box2 p:first-child*/
+        /*{*/
+            /*background: purple;*/
+        /*}*/
+        /*.box2 p:last-child{*/
+            /*background: purple;*/
+        /*}*/
+        /*.box2 p:nth-child(2n)*/
+         /*{*/
+             /*background: skyblue;*/
+         /*}*/
+        /*.box p:nth-child(2n+1)*/
+        /*{*/
+            /*background: purple;*/
+        /*}*/
+          /*.box p:nth-child(-n+2)!**注意这里的n是从0开始*!*/
+          /*{*/
+              /*background: gold;*/
+          /*}*/
+          /*.box p:nth-of-type(2)*/
+          /*{*/
+              /*background: deepskyblue;*/
+          /*}*/
+          /*.box :nth-child(2)*/
+          /*{*/
+              /*background: greenyellow;*/
+          /*}*/
+        input:focus{
+            color: red;
+        }
+        .radio:checked
+        {
+            width:20px;
+            height:50px;
+        }
+    </style>
+</head>
+<body>
+    <!--<div>-->
+        <!--<h1>我是标题</h1>-->
+    <!--</div>-->
+    <div class="box">
+        <h3>我是标题1</h3>
+        <h3>我是标题2</h3>
+        <h3>我是标题3</h3>
+        <p>我是内容1</p>
+        <p>我是内容2</p>
+        <p>我是内容3</p>
+        <p>我是内容4</p>
+        <p>我是内容5</p>
+        <p>我是内容6</p>
+    </div>
+    <div class="box2">
+        <p>我是内容1</p>
+        <p>我是内容2</p>
+        <p>我是内容3</p>
+        <p>我是内容4</p>
+        <p>我是内容5</p>
+        <p>我是内容6</p>
+    </div>
+    <input type="text"/>
+    <input type="radio" class="radio"/>
+</body>
+</html>

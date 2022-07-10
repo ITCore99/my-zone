@@ -1,0 +1,70 @@
+body{
+    padding:0;
+    margin:0;
+}
+div {
+    box-sizing: border-box;
+}
+main{
+    width: 600px;
+    height: 400px;
+    margin:50px auto;
+    background: #eee;
+    background: #EB365B;
+}
+.header-part {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    background: #FF2403;    
+}
+.header-part .button {
+    font-size: 18px;
+    font-weight: 600;
+    padding:2px 5px;
+}
+.header-part .current {
+    font-weight: 700;
+    font-size: 18px;
+}
+.header-part .prev{
+    margin-left:20px;
+}
+.header-part .next {
+    margin-right: 20px;
+}
+.week-part {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    height: 45px;
+    background: #FF2403;
+}
+.week-part .week {
+    width: calc(100% / 7);
+    height: 100%;
+    line-height: 45px;
+    text-align: center;
+}
+.datePart {
+    display: flex;
+    flex-wrap: wrap;
+}
+.datePart .date {
+    width: calc(100% / 7);
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+}
+.datePart .date:hover {
+    color:#fff;
+    font-size: 20px;
+    cursor: pointer;
+    background: #FF3B0A
+}
+.pointer {
+    cursor: pointer;
+}

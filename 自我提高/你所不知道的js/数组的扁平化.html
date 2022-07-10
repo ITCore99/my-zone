@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数组的扁平化</title>
+</head>
+<body>
+    /**我们先说一说什么数组的扁平化 所谓的js的扁平化就是将一个多维的数组进行一维话使得我们能够更加方便的操作和计算*/
+    <script>
+        
+        let heightArry = [1,[2,3,[4,[5,[6,[7,8,[9,[10,[11,12]]]]]]]]];
+        /***第一种代码书写递归的方式*/
+        function myFlat(arr) {
+            var arr = arr || [];
+            var result = [];
+            var len = arr.length;
+            for(let i = 0; i < len; i++) {
+                let item = arr[i];
+                if(Array.isArray(item)) {
+                    result = result.concat(myFlat(item));
+                } else {
+                    result.push(item);
+                }
+            };
+            return result;
+        }
+        /**测试**/
+        // console.log(myFlat(heightArry));
+        //优化
+        Array.prototype.myFlat = function() {
+            var result = [];
+            this.forEach(element => {
+                !Array.isArray(element) ? result.push(element) : result = result.concat(myFlat(element));
+            });
+            return result;
+        }
+        /**测试**/
+        //console.log(myFlat(heightArry));
+        //继续优化使用reduce 
+        function myFlat(arr) {
+
+           return arr.reduce((prev,current,index) => Array.isArray(current) ? prev.concat(myFlat(current)) : prev.concat(current),[]) //主要这里不能push 因为push 返回回来的是数组的长度而不是数组
+       };
+       //console.log(myFlat(heightArry));
+       var myFlat = arr =>  arr.reduce((prev,current,index) => Array.isArray(current) ? prev.concat(myFlat(current)) : prev.concat(current),[]); 
+        console.log(myFlat(heightArry));
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding:0;
+        }
+        .container
+        {
+            width:400px;
+            height:250px;
+            margin:50px auto;
+            transition:transform linear 2s;
+        }
+        html:hover .container
+        {
+            transform: rotate(180deg);/**默认是一种中心点为旋转中心*/
+            /*transform-origin: center 202px;*/
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="../images/39.jpg"/>
+    </div>
+</body>
+</html>

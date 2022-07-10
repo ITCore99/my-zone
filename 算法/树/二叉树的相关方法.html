@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>二叉树的相关方法</title>
+</head>
+<body>
+    <script>
+        /**搜索二叉树的相关操作*/
+        function BinaryTree() {
+            //根节点
+            this.root = null;
+            //前序遍历字符串
+            this.frontSearchStr = "";
+            //中序遍历字符串
+            this.middleSearchStr = "";
+            //后序遍历字符串
+            this.backSearchStr = "";
+            //最大值
+            maxValue = "";
+            //最小值
+            minValue = "";
+
+            function Node(data) {
+                this.data = data;
+                //左子树
+                this.leftChild = null;
+                //右子树
+                this.rightChild = null;
+
+            }
+            //二叉树的插入暴露给用户
+            BinaryTree.prototype.insertNode = function(data) {
+                let newNode = new Node(data);
+                if(this.root == null) {
+                    this.root = newNode;
+                }else {
+                    this.insert(this.root,newNode);
+                };
+                return this;
+            }
+            //插入辅助函数
+            BinaryTree.prototype.insert = function(node,newNode) {
+                if((newNode.data >> 0) <=  (node.data >> 0)) { //小于的话一直往左找
+                    if(node.leftChild) {
+                        this.insert(node.leftChild,newNode);
+                    }else {
+                        node.leftChild = newNode;
+                    }
+                }else if((newNode.data >> 0) > (node.data >> 0)) {//大于的话一直往又找
+                    if(node.rightChild) {
+                        this.insert(node.rightChild,newNode);
+                    }else{
+                        node.rightChild = newNode;
+                    }
+                }
+            },
+            //搜素二叉树前序遍历
+            BinaryTree.prototype.frontSearch = function() {
+                if(this.root == null) {
+                    return this.frontSearchStr;
+                }else {
+                    this.mapFront(this.root)
+                }
+                return this.frontSearchStr;
+            },
+            //辅助前序遍历
+            BinaryTree.prototype.mapFront = function(node) {
+                if(node == null) {
+                    return;
+                }
+                this.frontSearchStr += node.data + ",";
+                this.mapFront(node.leftChild);
+                this.mapFront(node.rightChild);
+            },
+            //搜索二叉树中序遍历 参数 handler是用户的处理函数
+            BinaryTree.prototype.middleSearch = function(handler) {
+                if(this.root == null) {
+                    return this.middleSearchStr;
+                }else {
+                    this.mapMiddle(this.root,handler);
+                }
+            }
+            //辅助中序遍历函数
+            BinaryTree.prototype.mapMiddle = function(node,handler) {
+                if(node == null) {
+                    return ;
+                }
+                this.mapMiddle(node.leftChild,handler);
+                handler(node.data);
+                this.mapMiddle(node.rightChild,handler);
+            }
+            //后序遍历函数
+            BinaryTree.prototype.backSearch = function() {
+                if(this.root == null) {
+                    return this.backSearchStr;
+                }else {
+                    this.mapBack(this.root);
+                }
+                return this.backSearchStr;
+            }
+            //辅助后序遍历函数
+            BinaryTree.prototype.mapBack = function(node) {
+                if(node == null) {
+                    return;
+                }
+                this.mapBack(node.leftChild);
+                this.mapBack(node.rightChild);
+                this.backSearchStr += node.data + ",";
+            }
+            //搜索二叉树的最大值
+            BinaryTree.prototype.maxValue = function() {
+                if(this.root == null) {
+                    return -1;
+                }else {
+                    this.mapMax(this.root)
+                }
+                return this.maxValue;
+            },
+            //辅助最大值函数
+            BinaryTree.prototype.mapMax = function(node) {
+                if(node == null) {
+                    return;
+                }
+                this.maxValue = node.data;
+                this.mapMax(node.rightChild);
+            }
+            //搜索二叉树的最小值
+            BinaryTree.prototype.minValue = function() {
+                if(this.root == null) {
+                    return -1;
+                }else {
+                    this.mapMin(this.root,this);
+                }
+                return this.minValue;
+            }
+            //辅助最小值
+            BinaryTree.prototype.mapMin = function(node,that) {
+                if(node == null){
+                    return;
+                };
+                that.minValue = node.data;
+                arguments.callee(node.leftChild,that); //以通过这种方式调用 this并不是Binary而是arguments
+            }
+            //搜索二叉树修改
+            BinaryTree.prototype.update = function(key,data) {
+                if(this.root == null) {
+                    return false;
+                }else {
+                   return this.mapUpdate(this.root,key,data);
+                }
+            },
+            BinaryTree.prototype.mapUpdate = function(node,key,data) {
+                if(node.data == key ) {
+                    node.data = data;
+                    return true;
+                }else if(key <= node.data) {
+                    return this.mapUpdate(node.leftChild,key,data); 
+                }else {
+                    return this.mapUpdate(node.rightChild,key,data);
+                }
+            }
+
+
+        }
+        //测试
+        // let binaryTree = new BinaryTree();
+        // binaryTree.insertNode("11");
+        // binaryTree.insertNode("7");
+        // binaryTree.insertNode("15");
+        // binaryTree.insertNode("5");
+        // binaryTree.insertNode("3");
+        // binaryTree.insertNode("9");
+        // binaryTree.insertNode("8");
+        // binaryTree.insertNode("10");
+        // binaryTree.insertNode("13");
+        // binaryTree.insertNode("12");
+        // binaryTree.insertNode("14");
+        // binaryTree.insertNode("20");
+        // binaryTree.insertNode("18");
+        // binaryTree.insertNode("25");
+        // binaryTree.insertNode("6");
+        // console.log("binaryTree",binaryTree);
+        // let frontStr = binaryTree.frontSearch();
+        // console.log("前序遍历 ==>",frontStr);
+        let myBinaryTree = new BinaryTree();
+        myBinaryTree.insertNode("5");
+        myBinaryTree.insertNode("3");
+        myBinaryTree.insertNode("7");
+        myBinaryTree.insertNode("2");
+        myBinaryTree.insertNode("4");
+        myBinaryTree.insertNode("6");
+        myBinaryTree.insertNode("9");
+        myBinaryTree.insertNode("1");
+        myBinaryTree.insertNode("8");
+        myBinaryTree.insertNode("10");
+        console.log("myBinaryTree",myBinaryTree);
+        console.log("前序遍历2 ==>",myBinaryTree.frontSearch());
+        let middleResultStr = "";
+        myBinaryTree.middleSearch((data) => {
+            middleResultStr += data + "|";
+        });
+        console.log("中序遍历2===>",middleResultStr);
+        console.log("后序遍历2 ==>",myBinaryTree.backSearch());
+        console.log("最大值",myBinaryTree.maxValue());
+        console.log("最小值",myBinaryTree.minValue());
+        console.log("修改",myBinaryTree.update(2,2.5));
+    </script>
+</body>
+</html>

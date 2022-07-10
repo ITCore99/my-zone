@@ -1,0 +1,1 @@
+console.log("这个文件和index.js没有引用关西")

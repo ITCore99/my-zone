@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>发布订阅设计模式</title>
+</head>
+
+<body>
+  <!--
+        所谓的发布订阅就是：凡是符合在未来的某个时刻要做一系列的事情我们就可以提前将这些事件进行订阅，都=到固定时间再去一一的执行这些订阅的事件这就是发布订阅模式
+        1、发布订阅和DOM2的事件池机制
+            DOM0和DOM2事件的区别：
+                1、语法的区别
+                    dom0实现事件的绑定如 box.onclick=function() {}。
+                    dom2实现事件的绑定如 box.addEventListener("click",function(){});
+                2、底层运行的机制的区别
+                    dom0是个元素的某个属性绑定方法，有效的只能是一个
+                    dom2是基于事件池机制完成的 每增加一个绑定的方法就会想事件池中存放一个，当事件触发时会一次的执行事件池中的方法。我们现在所说的这种发布订阅的思想就是来自Dom2的事件绑定思想 也可以说是发布订阅就是模拟事件池的机制（可以同一个元素绑定多个不同的方法）。
+                3、dom2中可以给一些特殊的事件类型绑定方法但是dom就不可以 如DOMContentLoaded,transitionend ....。
+        2、jquery中的发布订阅 大概在这里提示一下就可以 到时用到我们可以在进行查询。
+            jQuery.$callbacks() 创建一个事件池
+            add/remove add是向事件池中添加订阅事件 remove 是删除订阅的事件
+            fire()方法是发起事件的订阅。
+        3、手写基于ES6自己发布订阅模式 如下
+    -->
+  <button id="submit">提交</button>
+  <script>
+    let _subscribe = (function () {
+      class Sub {
+        constructor() {
+          this.pond = [];     //事件池
+        }
+        //=> add向事件池中添加订阅事件
+        add(fn) {
+          if (typeof fn !== "function") {
+            throw new Error("arguments must be Function")
+          }
+          if (this.pond.length > 0) {
+            let pond = this.pond;
+            if (pond.some(item => item === fn)) return;      //去重
+            this.pond.push(fn);
+          } else {
+            this.pond.push(fn)
+          }
+        }
+        //=> remove 移除事件池中方法
+        remove(fn) {
+          if (typeof fn !== "function") {
+            throw new Error("arguments must be Function")
+          };
+          let pond = this.pond;
+          for (let i = 0; i < pond.length; i++) {
+            let item = pond[i];
+            if (item === fn) {
+              pond[i] = null;     //软删除 注意这里不能使用splice删除 这里删除会出现事件塌陷问题
+            }
+          }
+        }
+        //=> 通知事件池中方法执行
+        fire(...args) {
+          let pond = this.pond;
+          for (let i = 0; i < pond.length; i++) {
+            let item = pond[i];
+            if (item !== null) {
+              item.call(this, ...args);
+            } else {
+              this.pond.splice(i, 1);
+              i--;
+            }
+          }
+        }
+      }
+      return function () {
+        return new Sub();
+      }
+    })();
+
+    let s1 = function () {
+      console.log(1);
+    }
+    let s2 = function () {
+      console.log(2);
+      pond.remove(s1);
+    }
+    let s3 = function () {
+      console.log(3);
+    }
+    let s4 = function () {
+      console.log(4);
+    }
+    let s5 = function (event) {
+      console.log(5, event);
+    }
+    let pond = _subscribe();
+    let btn = document.querySelector("#submit");
+    btn.onclick = function (event) {
+      pond.fire(event);
+    }
+    pond.add(s1);
+    pond.add(s1);
+    pond.add(s2);
+    pond.add(s3);
+    pond.add(s4);
+    pond.add(s5);
+
+    Array.prototype.myReduce = function (cb, prev) {
+      let i = 0
+      if (prev == undefined) {
+        debugger
+        prev = this[0];
+        i = 1
+      }
+      for (; i < this.length; i++) {
+        prev = cb(prev, this[i], i, this)
+      }
+      return prev
+    }
+    const res = [1, 2, 3].myReduce((prev, curr) => {
+      return prev * curr
+    }, 1);
+    console.log(res)
+    const add1 = str => str + '1'
+    const add2 = str => str + '2'
+    const add3 = str => str + '3'
+    const add4 = str => str + '4'
+    function compose(...fns) {
+      return function (...args) {
+        // 注意这里要对第一个进行特殊处理
+        let lastFn = fns.pop()
+        let r = lastFn(...args)
+        return fns.reduceRight((prev, curr) => {
+          return curr(prev)
+        }, r)
+      }
+    }
+    // console.log(111, compose(add4, add3, add2, add1)('a'))
+    const compose2 = (...fns) => fns.reduce((prev, curr) => (...args) => curr(prev(...args)))
+
+    console.log(222, compose2(add1, add2, add3, add4)('a'))
+  </script>
+</body>
+
+</html>
